@@ -39,9 +39,9 @@ SUBROUTINE calc_ts_locations( grid )
    CHARACTER (LEN=2), DIMENSION(TS_FIELDS) :: &
       ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'O3'/)
 #else
-   INTEGER, PARAMETER :: TS_FIELDS = 7
+   INTEGER, PARAMETER :: TS_FIELDS = 9
    CHARACTER (LEN=2), DIMENSION(TS_FIELDS) :: &
-      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR'/) 
+      ts_file_endings = (/ 'UU', 'VV', 'PH', 'TH', 'QV' ,'WW', 'PR', 'KE', 'KP'/) 
 #endif
    INTEGER   ierr
    CHARACTER (len=19) simulation_start_date
@@ -459,6 +459,8 @@ SUBROUTINE calc_ts( grid )
             END IF
             grid%ts_qv_profile(n,i,k)  = grid%moist(ix,k,iy,P_QV)
             grid%ts_p_profile(n,i,k)   = grid%pb(ix,k,iy)+grid%p(ix,k,iy)
+            grid%ts_ke_profile(n,i,k)  = grid%tke_2(ix,k,iy)
+            grid%ts_kp_profile(n,i,k)  = grid%tke_pbl(ix,k,iy)
             END DO
 #endif
 #if (WRF_CHEM == 1)
@@ -555,6 +557,9 @@ SUBROUTINE calc_ts( grid )
          grid%ts_th_profile(n,i,k)    = 1.E30
          grid%ts_qv_profile(n,i,k)    = 1.E30
          grid%ts_p_profile(n,i,k)     = 1.E30
+         grid%ts_ke_profile(n,i,k)    = 1.E30
+         grid%ts_kp_profile(n,i,k)    = 1.E30
+
          END DO
 #endif   
 #if (WRF_CHEM == 1)
@@ -701,6 +706,17 @@ SUBROUTINE write_ts( grid )
    ts_buf(:,:) = grid%ts_p_profile(:,:,k)
    CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_p_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
    END DO
+
+   DO k=1,grid%max_ts_level
+   ts_buf(:,:)=grid%ts_ke_profile(:,:,k)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_ke_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
+   END DO
+
+   DO k=1,grid%max_ts_level
+   ts_buf(:,:)=grid%ts_kp_profile(:,:,k)
+   CALL wrf_dm_min_reals(ts_buf(:,:),grid%ts_kp_profile(:,:,k),grid%ts_buf_size*grid%max_ts_locs)
+   END DO
+
 #endif         
 #if (WRF_CHEM == 1)
    DO k=1,grid%max_ts_level
@@ -1108,6 +1124,44 @@ SUBROUTINE write_ts( grid )
             WRITE(UNIT=iunit,FMT=profile_format)  &
                               grid%ts_hour(n,i),             &
                               grid%ts_p_profile(n,i,1:grid%max_ts_level)                                       
+         END DO
+         CLOSE(UNIT=iunit)
+
+         !Write TKE profile to separate file
+         iunit = get_unused_unit()
+            IF ( iunit <= 0 ) THEN
+            CALL wrf_error_fatal('Error in write_ts: could not find a free Fortran unit.')
+            END IF
+         !Recreate filename for TKE profiles
+         k = LEN_TRIM(ts_profile_filename)
+         WRITE(ts_profile_filename(k-1:k),'(A2)') 'KE'
+
+         OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
+
+         DO n=1,grid%next_ts_time - 1
+
+            WRITE(UNIT=iunit,FMT=profile_format)   &
+                              grid%ts_hour(n,i),              &
+                              grid%ts_ke_profile(n,i,1:grid%max_ts_level)
+         END DO
+         CLOSE(UNIT=iunit)
+
+         !Write TKEPBL profile to separate file
+         iunit = get_unused_unit()
+            IF ( iunit <= 0 ) THEN
+            CALL wrf_error_fatal('Error in write_ts: could not find a free Fortran unit.')
+            END IF
+         !Recreate filename for TKEPBL profiles
+         k = LEN_TRIM(ts_profile_filename)
+         WRITE(ts_profile_filename(k-1:k),'(A2)') 'KP'
+
+         OPEN(UNIT=iunit, FILE=TRIM(ts_profile_filename), STATUS='unknown', POSITION='append', FORM='formatted')
+
+         DO n=1,grid%next_ts_time - 1
+
+            WRITE(UNIT=iunit,FMT=profile_format)   &
+                              grid%ts_hour(n,i),              &
+                              grid%ts_kp_profile(n,i,1:grid%max_ts_level)
          END DO
          CLOSE(UNIT=iunit)
 
