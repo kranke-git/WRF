@@ -1443,7 +1443,7 @@ CHARACTER(LEN=8) :: name
                 thl_up, thv_up, rt_up,       &
                 rv_up, rc_up, u_up, v_up,    &
                 frac_up, itimestep,id,                          &
-                EXCH_H,VEGFRA,                                  &
+                EXCH_H,EXCH_M,VEGFRA,                           &
                 SNOW,SNOWC, CANWAT,SMSTAV,                      &
                 SMSTOT, SFCRUNOFF,UDRUNOFF,ACSNOW,ACSNOM,       &
                 IVGTYP,ISLTYP,ISURBAN,SMOIS,SMFR3D,MAVAIL,      &
@@ -2484,7 +2484,7 @@ CHARACTER(LEN=8) :: name
                 thl_up, thv_up, rt_up,       &
                 rv_up, rc_up, u_up, v_up,    &
                 frac_up, itimestep, id,                         &
-                EXCH_H,VEGFRA,                                  &
+                EXCH_H,EXCH_M,VEGFRA,                           &
                 SNOW,SNOWC, CANWAT,SMSTAV,                      &
                 SMSTOT, SFCRUNOFF,UDRUNOFF,ACSNOW,ACSNOM,       &
                 IVGTYP,ISLTYP,ISURBAN,SMOIS,SMFR3D,mavail,      &
@@ -2764,6 +2764,7 @@ CHARACTER(LEN=8) :: name
                                                            RUBLTEN, &
                                                            RVBLTEN, &
                                                           EXCH_H,   &
+                                                          EXCH_M,   &
                                                           RTHBLTEN, &
                                                           RQVBLTEN, &
                                                           RQCBLTEN, &
@@ -3801,6 +3802,7 @@ CALL lsm_mosaic_init(IVGTYP,config_flags%ISWATER,config_flags%ISURBAN,config_fla
            CALL myjpblinit(RUBLTEN,RVBLTEN,RTHBLTEN,RQVBLTEN, &
                         TKE_PBL,EXCH_H,restart,               &
                         allowed_to_read ,                     &
+                        EXCH_M,                               &
                         ids, ide, jds, jde, kds, kde,         &
                         ims, ime, jms, jme, kms, kme,         &
                         its, ite, jts, jte, kts, kte          )

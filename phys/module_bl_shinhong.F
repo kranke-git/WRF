@@ -16,6 +16,7 @@ contains
                   xland,hfx,qfx,wspd,br,                                       &
                   dt,kpbl2d,                                                   &
                   exch_h,                                                      &
+                  exch_m,                                                      &
                   u10,v10,                                                     &
                   shinhong_tke_diag,tke_pbl,el_pbl,corf,                       &
                   dx,dy,                                                       &
@@ -138,6 +139,10 @@ contains
                                                                      rqcblten
    real,     dimension( ims:ime, kms:kme, jms:jme )                          , &
              intent(inout)   ::                                        exch_h
+
+   real,     dimension( ims:ime, kms:kme, jms:jme )                          , &
+             intent(inout)   ::                                        exch_m
+
    real,     dimension( ims:ime, kms:kme, jms:jme )                          , &
              intent(inout)   ::                                       tke_pbl, &
                                                                        el_pbl
@@ -236,6 +241,7 @@ contains
              ,dusfc=dusfc,dvsfc=dvsfc,dtsfc=dtsfc,dqsfc=dqsfc                  &
              ,dt=dt,rcl=1.0,kpbl1d=kpbl2d(ims,j)                               &
              ,exch_hx=exch_h(ims,kms,j)                                        &
+             ,exch_mx=exch_h(ims,kms,j)                                        &
              ,wstar=wstar(ims,j)                                               &
              ,delta=delta(ims,j)                                               &
              ,u10=u10(ims,j),v10=v10(ims,j)                                    &
@@ -272,6 +278,7 @@ contains
                   dusfc,dvsfc,dtsfc,dqsfc,                                     &
                   dt,rcl,kpbl1d,                                               &
                   exch_hx,                                                     &
+                  exch_mx,                                                     &
                   wstar,delta,                                                 &
                   shinhong_tke_diag,                                           &
                   tke,el_pbl,corf,                                             &
@@ -380,6 +387,10 @@ contains
                                                                          ttnp
    real,     dimension( ims:ime, kms:kme )                                   , &
              intent(inout)   ::                                       exch_hx
+
+   real,     dimension( ims:ime, kms:kme )                                   , &
+             intent(inout)   ::                                       exch_mx
+
    real,     dimension( ims:ime, kms:kme )                                   , &
              intent(inout)   ::                                           tke, &
                                                                        el_pbl
@@ -1183,6 +1194,7 @@ contains
        ad(i,k)   = ad(i,k)-au(i,k)
        ad(i,k+1) = 1.-al(i,k)
        exch_hx(i,k+1) = xkzh(i,k)
+       exch_mx(i,k+1) = xkzm(i,k)
      enddo
    enddo
 !

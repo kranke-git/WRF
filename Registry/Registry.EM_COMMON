@@ -308,7 +308,7 @@ state    real   ht_coarse       ij     misc        1   -     r                - 
 
 
 # TKE
-state    real   tke            ikj     dyn_em      2         -       r        "tke"          "TURBULENCE KINETIC ENERGY"     "m2 s-2"
+state    real   tke            ikj     dyn_em      2         -       irhdus   "tke"          "TURBULENCE KINETIC ENERGY"     "m2 s-2"
 i1       real   tke_tend       ikj     dyn_em      1         -      
 
 # variables in 3DTKE scheme (km_opt=5)
@@ -800,6 +800,8 @@ state    real   ts_gph_profile ?!k       misc      -         -      -        "TS
 state    real   ts_th_profile  ?!k       misc      -         -      -        "TS_TH_PROFILE"  "Total potential temperature, vertical profile" "K"
 state    real   ts_qv_profile  ?!k       misc      -         -      -        "TS_QV_PROFILE"  "Water vapor mixing ratio, vertical profile" "kg/kg"
 state    real   ts_p_profile   ?!k       misc      -         -      -        "TS_P_PROFILE"   "Pressure, vertical profile" "Pa"
+state    real   ts_ke_profile  ?!k       misc      -         -      -        "TS_KE_PROFILE"  "TKE from variable tke, vertical profile"
+state    real   ts_kp_profile  ?!k       misc      -         -      -        "TS_KP_PROFILE"  "TKE_PBL from variable tke_pbl, vertical profile"
 
 
 # urban model variables
@@ -1034,8 +1036,8 @@ state   real   pek_adv        ikjftb  scalar      1         -      i0rusdf=(bdy_
 state   real   pep_adv        ikjftb  scalar      1         -      i0rusdf=(bdy_interp:dt) "pep_adv"       "TKE dissipating rate from EEPS"      "m2 s-3"
 
 # MYJ PBL variables; GBM PBL: EXCH_H, EXCH_M
-state    real   EXCH_H          ikj     misc        1         Z     r        "EXCH_H"               "SCALAR EXCHANGE COEFFICIENTS "                "m2 s-1"
-state    real   EXCH_M          ikj     misc        1         Z     r        "EXCH_M"               "EXCHANGE COEFFICIENTS "                       "m2 s-1"
+state    real   EXCH_H          ikj     misc        1         Z     rh       "EXCH_H"               "SCALAR EXCHANGE COEFFICIENTS "                "m2 s-1"
+state    real   EXCH_M          ikj     misc        1         Z     rh       "EXCH_M"               "EXCHANGE COEFFICIENTS "                       "m2 s-1"
 state    real  CT               ij      misc        1         -     r        "CT"                    "COUNTERGRADIENT TERM"    "K"
 state   real   THZ0             ij     misc        1         -      r        "THZ0"                  "POTENTIAL TEMPERATURE AT ZNT"                 "K"
 state    real  Z0               ij     misc        1         -      r        "Z0"                    "Background ROUGHNESS LENGTH"                  "m"
@@ -1960,18 +1962,18 @@ state    real   soiltb         ij      dyn_em      1         -       r        "s
 state integer  STEPBL          -        misc        1         -      r        "STEPBL"                "NUMBER OF FUNDAMENTAL TIMESTEPS BETWEEN PBL CALLS" ""      
 state    real  taucldi         ikj      misc        1         -      r        "TAUCLDI"               "CLOUD OPTICAL THICKNESS FOR ICE"              ""
 state    real  taucldc         ikj      misc        1         -      r        "TAUCLDC"               "CLOUD OPTICAL THICKNESS FOR WATER"            ""
-state   real  defor11          ikj      misc        1         -     r         "defor11"               "DEFORMATION 11"              "s-1"      
-state   real  defor22          ikj      misc        1         -     r         "defor22"               "DEFORMATION 22"              "s-1"      
-state   real  defor12          ikj      misc        1         -     r         "defor12"               "DEFORMATION 12"              "s-1"      
-state   real  defor33          ikj      misc        1         z     r         "defor33"               "DEFORMATION 33"              "s-1"      
-state   real  defor13          ikj      misc        1         z     r         "defor13"               "DEFORMATION 13"              "s-1"      
-state   real  defor23          ikj      misc        1         z     r         "defor23"               "DEFORMATION 23"              "s-1"      
-state   real   xkmv            ikj      misc        1         -     r         "xkmv"                  "VERTICAL EDDY VISCOSITY"     "m2 s-1"      
-state   real   xkmh            ikj      misc        1         -     r         "xkmh"                  "HORIZONTAL EDDY VISCOSITY"   "m2 s-1"      
-state   real   xkhv            ikj      misc        1         -     r         "xkhv"                  "VERTICAL EDDY DIFFUSIVITY OF HEAT"                               "m2 s-1"      
-state   real   xkhh            ikj      misc        1         -     r         "xkhh"                  "HORIZONTAL EDDY DIFFUSIVITY OF HEAT"                             "m2 s-1"      
+state   real  defor11          ikj      misc        1         -     rh        "defor11"               "DEFORMATION 11"              "s-1"      
+state   real  defor22          ikj      misc        1         -     rh        "defor22"               "DEFORMATION 22"              "s-1"      
+state   real  defor12          ikj      misc        1         -     rh        "defor12"               "DEFORMATION 12"              "s-1"      
+state   real  defor33          ikj      misc        1         z     rh        "defor33"               "DEFORMATION 33"              "s-1"      
+state   real  defor13          ikj      misc        1         z     rh        "defor13"               "DEFORMATION 13"              "s-1"      
+state   real  defor23          ikj      misc        1         z     rh        "defor23"               "DEFORMATION 23"              "s-1"      
+state   real   xkmv            ikj      misc        1         -     rh        "xkmv"                  "VERTICAL EDDY VISCOSITY"     "m2 s-1"      
+state   real   xkmh            ikj      misc        1         -     rh        "xkmh"                  "HORIZONTAL EDDY VISCOSITY"   "m2 s-1"      
+state   real   xkhv            ikj      misc        1         -     rh        "xkhv"                  "VERTICAL EDDY DIFFUSIVITY OF HEAT"                               "m2 s-1"      
+state   real   xkhh            ikj      misc        1         -     rh        "xkhh"                  "HORIZONTAL EDDY DIFFUSIVITY OF HEAT"                             "m2 s-1"      
 state   real    div            ikj      misc        1         -     r         "div"                   "DIVERGENCE"                                                      "s-1"
-state   real    BN2            ikj      misc        1         -     r         "BN2"                   "BRUNT-VAISALA FREQUENCY"                                         "s-2"
+state   real    BN2            ikj      misc        1         -     rh        "BN2"                   "BRUNT-VAISALA FREQUENCY"                                         "s-2"
 state  logical warm_rain        -       misc        1         -     -         "warm_rain"              "WARM_RAIN_LOGICAL"
 state  logical adv_moist_cond   -       misc        1         -     -         "adv_moist_cond"         "ADVECT MOIST CONDENSATES LOGICAL"
 state  integer save_topo_from_real -    dyn_em	    1         -     i02rh     "save_topo_from_real"    "1=original topo from real/0=topo modified by WRF"      "flag"

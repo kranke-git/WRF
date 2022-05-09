@@ -1288,7 +1288,7 @@ CONTAINS
               ,SHINHONG_TKE_DIAG=shinhong_tke_diag                  &
               ,WSPD=wspd,BR=br,DT=dtbl,KPBL2D=kpbl                  &
               ,EP1=ep_1,EP2=ep_2,KARMAN=karman                      &
-              ,EXCH_H=exch_h,REGIME=regime                          &
+              ,EXCH_H=exch_h,EXCH_M=exch_m,REGIME=regime            &
 ! for grims shallow convection with shinhongpbl
               ,WSTAR=wstar,DELTA=delta                              &
               ,TKE_PBL=tke_pbl,EL_PBL=el_pbl,CORF=f                 &
@@ -1424,7 +1424,8 @@ CONTAINS
               ,XLAND=xland,SICE=xice,SNOW=snow                      &
               ,TKE_MYJ=tke_pbl,EXCH_H=exch_h,USTAR=ust,ZNT=znt      &
               ,EL_MYJ=el_pbl,PBLH=pblh,KPBL=kpbl,CT=ct              &
-              ,AKHS=akhs,AKMS=akms,ELFLX=lh,MIXHT=mixht             &  
+              ,AKHS=akhs,AKMS=akms,ELFLX=lh,MIXHT=mixht             & 
+              ,EXCH_M=exch_m                                        & !kranke 
               ,RUBLTEN=rublten,RVBLTEN=rvblten,RTHBLTEN=rthblten    &
               ,RQVBLTEN=rqvblten,RQCBLTEN=rqcblten                  &
               ,RQIBLTEN=rqiblten,RQSBLTEN=rqsblten                  & !BSF

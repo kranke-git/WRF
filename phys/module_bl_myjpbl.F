@@ -133,7 +133,7 @@
      &                 ,U,V,RHO,TSK,QSFC,CHKLOWQ,THZ0,QZ0,UZ0,VZ0      & !BSF
      &                 ,LOWLYR,XLAND,SICE,SNOW                         &
      &                 ,TKE_MYJ,EXCH_H,USTAR,ZNT,EL_MYJ,PBLH,KPBL,CT   &
-     &                 ,AKHS,AKMS,ELFLX,MIXHT                          &   !PLee (3/07)
+     &                 ,AKHS,AKMS,ELFLX,MIXHT,EXCH_M                   &   !PLee (3/07)
      &                 ,RUBLTEN,RVBLTEN,RTHBLTEN,RQVBLTEN,RQCBLTEN     &
      &                 ,RQIBLTEN,RQSBLTEN,RQRBLTEN,RQGBLTEN            & !BSF
      &                 ,IDS,IDE,JDS,JDE,KDS,KDE                        &
@@ -185,7 +185,7 @@
      &                                                ,UZ0,VZ0,ZNT
 !
       REAL,DIMENSION(IMS:IME,KMS:KME,JMS:JME)                          &
-     &    ,INTENT(INOUT) ::                    EXCH_H,TKE_MYJ
+     &    ,INTENT(INOUT) ::                    EXCH_H, EXCH_M, TKE_MYJ
 !
       REAL,DIMENSION(IMS:IME,JMS:JME),INTENT(IN) :: CHKLOWQ,ELFLX
 !
@@ -441,6 +441,7 @@
             AKM(I,K,J)=AKMK(K)
             DELTAZ=0.5*(ZHK(KFLIP)-ZHK(KFLIP+2))
             EXCH_H(I,K,J)=AKHK(KFLIP)*DELTAZ
+            EXCH_M(I,K,J)=AKMK(KFLIP)*DELTAZ
           ENDDO
 !
 !----------------------------------------------------------------------
@@ -1693,6 +1694,7 @@
 !=======================================================================
       SUBROUTINE MYJPBLINIT(RUBLTEN,RVBLTEN,RTHBLTEN,RQVBLTEN,          &
      &                      TKE_MYJ,EXCH_H,RESTART,ALLOWED_TO_READ,     &
+     &                      EXCH_M,                                     &
      &                      IDS,IDE,JDS,JDE,KDS,KDE,                    &
      &                      IMS,IME,JMS,JME,KMS,KME,                    &
      &                      ITS,ITE,JTS,JTE,KTS,KTE                 )
@@ -1705,6 +1707,7 @@
      &                      ITS,ITE,JTS,JTE,KTS,KTE
 
       REAL,DIMENSION(IMS:IME,KMS:KME,JMS:JME),INTENT(OUT) ::    EXCH_H, &
+     &                                                          EXCH_M, &
      &                                                         RUBLTEN, &
      &                                                         RVBLTEN, &
      &                                                        RTHBLTEN, &
@@ -1728,6 +1731,7 @@
           RTHBLTEN(I,K,J)=0.
           RQVBLTEN(I,K,J)=0.
           EXCH_H(I,K,J)=0.
+          EXCH_M(I,K,J)=0.
         ENDDO
         ENDDO
         ENDDO
