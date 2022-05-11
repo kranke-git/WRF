@@ -3,7 +3,7 @@
 # IMPORTANT: DO NOT LOAD NETCDF LIBRARIES
 # USE PRIVATE ONES BY SETTING NETCDF ENV VARIABLE
 
-module load mvapich2/2.3.1   # This is for InfiniBand and MPI
+module load mvapich2/2.3.1   # This is for InfiniBand and MPI; should load intel too
 module unload R
 
 export NETCDF='/afs/crc/group/EnvStat/build'
