@@ -296,8 +296,8 @@ RECURSIVE SUBROUTINE adapt_timestep(grid, config_flags)
      stepping_to_bc = .true.
      grid%stepping_to_time = .TRUE.
      
-  elseif (tmpTimeInterval .LE. dtInterval) then
-     
+   elseif ((tmpTimeInterval .LE. dtInterval) .AND. (time_to_bc .GT. 0.0)) then
+  
      bc_time = NINT ( (curr_secs + time_to_bc) / ( grid%interval_seconds ) ) &
           * ( grid%interval_seconds )
      CALL WRFU_TimeIntervalSet(tmpTimeInterval, S=bc_time)
