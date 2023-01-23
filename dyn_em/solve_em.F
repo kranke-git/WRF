@@ -845,6 +845,14 @@ BENCH_START(calc_p_rho_tim)
                              , scalar , scalar_tend             &
                              , fdda3d, fdda2d                   &
                              , ru_tendf, rv_tendf               &
+                             , grid%ru_tend_phys                & !kranke
+                             , grid%ru_tend_damp                & !kranke
+                             , grid%ru_tend_vdiff               & !kranke
+                             , grid%ru_tend_hdiff               & !kranke
+                             , grid%rv_tend_phys                & !kranke
+                             , grid%rv_tend_damp                & !kranke
+                             , grid%rv_tend_vdiff               & !kranke
+                             , grid%rv_tend_hdiff               & !kranke
                              , rw_tendf, t_tendf                &
                              , ph_tendf, mu_tendf               &
                              , tke_tend                         &
@@ -876,6 +884,10 @@ BENCH_START(rk_tend_tim)
        CALL wrf_debug ( 200 , ' call rk_tendency' )
        CALL rk_tendency ( config_flags, rk_step                                                                &
                          ,grid%ru_tend, grid%rv_tend, rw_tend, ph_tend, t_tend                                 &
+                         ,grid%ru_tend_cor, grid%ru_tend_adv, grid%ru_tend_pgf, grid%ru_tend_curv              & ! kranke
+                         ,grid%ru_tend_hdiff, grid%ru_tend_vdiff, grid%ru_tend_damp, grid%ru_tend_6diff        & ! kranke
+                         ,grid%rv_tend_cor, grid%rv_tend_adv, grid%rv_tend_pgf, grid%rv_tend_curv              & ! kranke
+                         ,grid%rv_tend_hdiff, grid%rv_tend_vdiff, grid%rv_tend_damp, grid%rv_tend_6diff        & ! kranke
                          ,ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf                                      &
                          ,mu_tend, grid%u_save, grid%v_save, w_save, ph_save                                   &
                          ,grid%t_save, mu_save, grid%rthften                                                   &

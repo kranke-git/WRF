@@ -46,6 +46,8 @@ CONTAINS
                      ,history_interval                                &
                      ,itimestep                                       &
                      ,cu_used, shcu_used, acc_phy_tend                &
+                     ,ru_tend, ru_tend_phys                           & ! kranke
+                     ,aru_tend, aru_tend_phys                         & ! kranke
                                                                       )
 !----------------------------------------------------------------------
 
@@ -168,19 +170,25 @@ CONTAINS
  
    REAL,  INTENT(IN   ) :: DT, XTIME
    INTEGER,  INTENT(IN   )  ::  cu_used, shcu_used, acc_phy_tend
-   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(INOUT) ::&
-                                                    athmp,aqvmp  &
-                                         ,athcu,aqvcu,aucu,avcu  &
-                                         ,athsh,aqvsh,aush,avsh  &
-                                         ,athbl,aqvbl,aubl,avbl  &
-                                               ,athralw,athrasw
+   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(INOUT) ::  &
+                                                    athmp,aqvmp    &
+                                         ,athcu,aqvcu,aucu,avcu    &
+                                         ,athsh,aqvsh,aush,avsh    &
+                                         ,athbl,aqvbl,aubl,avbl    &
+                                               ,athralw,athraswi   &
+
+   ! kranke - Add accumulated tendencies
+   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(OUT) ::  &
+                                         ,aru_tend, aru_tend_phys  
+
 
    REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(IN) ::   &
                                          h_diabatic,qv_diabatic  &
                              ,rthcuten,rqvcuten,rucuten,rvcuten  &
                              ,rthshten,rqvshten,rushten,rvshten  &
                              ,rthblten,rqvblten,rublten,rvblten  &
-                                         ,rthratenlw,rthratensw
+                                         ,rthratenlw,rthratensw  &
+                                         ,ru_tend,ru_tend_phys    !kranke
 
    INTEGER, DIMENSION( ims:ime , jms:jme ), INTENT(INOUT) ::     &
                                                        I_RAINC,  &
@@ -252,6 +260,9 @@ CONTAINS
              avbl(i,k,j) = 0.
           athralw(i,k,j) = 0.
           athrasw(i,k,j) = 0.
+          ! kranke reset accumulate tendencies to zero
+          aru_tend(i,k,j)      = 0.
+          aru_tend_phys(i,k,j) = 0.
          ENDDO
          ENDDO
          ENDDO
@@ -273,12 +284,15 @@ CONTAINS
           aush(i,k,j)  =  aush(i,k,j)  +  rushten(i,k,j)*dt
           avsh(i,k,j)  =  avsh(i,k,j)  +  rvshten(i,k,j)*dt
          END IF
-         athbl(i,k,j)  = athbl(i,k,j)  +  rthblten(i,k,j)*dt
-         aqvbl(i,k,j)  = aqvbl(i,k,j)  +  rqvblten(i,k,j)*dt
-          aubl(i,k,j)  =  aubl(i,k,j)  +  rublten(i,k,j)*dt
-          avbl(i,k,j)  =  avbl(i,k,j)  +  rvblten(i,k,j)*dt
-       athralw(i,k,j)  =  athralw(i,k,j)  +  rthratenlw(i,k,j)*dt
-       athrasw(i,k,j)  =  athrasw(i,k,j)  +  rthratensw(i,k,j)*dt
+         athbl(i,k,j)    = athbl(i,k,j)  +  rthblten(i,k,j)*dt
+         aqvbl(i,k,j)    = aqvbl(i,k,j)  +  rqvblten(i,k,j)*dt
+         aubl(i,k,j)     = aubl(i,k,j)  +  rublten(i,k,j)*dt
+         avbl(i,k,j)     = avbl(i,k,j)  +  rvblten(i,k,j)*dt
+         athralw(i,k,j)  = athralw(i,k,j)  +  rthratenlw(i,k,j)*dt
+         athrasw(i,k,j)  = athrasw(i,k,j)  +  rthratensw(i,k,j)*dt
+         aru_tend(i,k,j) = aru_tend(i,k,j)  +  ru_tend(i,k,j)*dt !kranke - Total tendency
+         ! kranke - Add here all decomposed accumulated tendencies
+         aru_tend_phys(i,k,j) = aru_tend(i,k,j)  +  ru_tend_phys(i,k,j)*dt
       ENDDO
       ENDDO
       ENDDO

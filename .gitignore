@@ -17,8 +17,15 @@
 configure.wrf*
 *.backup
 *.f90
+log*
+run/namelist.input.backup*
+run/input_sounding
+test/em_hill2d_x/README.namelist
+*/*.f90
+*/*/*.f90
+*/*/*/*.f90
+COMPILEW*
 
-# kranke-added
 Registry/Registry
 Registry/io_boilerplate_temporary.inc
 compile.log

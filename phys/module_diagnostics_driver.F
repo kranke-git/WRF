@@ -403,7 +403,10 @@ CONTAINS
                 ,J_START=grid%j_start,J_END=min(grid%j_end, jde-1)   &
                 ,KTS=k_start, KTE=min(k_end,kde-1)                   &
                 ,NUM_TILES=grid%num_tiles                            &
-                                                                    )
+      ! kranke tendencies
+                ,ru_tend=grid%ru_tend,ru_tend_phys=grid%ru_tend_phys     &
+                ,aru_tend=grid%aru_tend,aru_tend_phys=grid%aru_tend_phys &
+                                                                     )
 
       NWPDIAGS: IF ( config_flags%nwp_diagnostics == 1 ) THEN
       CALL wrf_debug ( 100 , '--> CALL DIAGNOSTICS PACKAGE: NWP DIAGNOSTICS' )
