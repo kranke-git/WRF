@@ -403,10 +403,29 @@ CONTAINS
                 ,J_START=grid%j_start,J_END=min(grid%j_end, jde-1)   &
                 ,KTS=k_start, KTE=min(k_end,kde-1)                   &
                 ,NUM_TILES=grid%num_tiles                            &
-      ! kranke tendencies
-                ,ru_tend=grid%ru_tend,ru_tend_phys=grid%ru_tend_phys     &
-                ,aru_tend=grid%aru_tend,aru_tend_phys=grid%aru_tend_phys &
-                                                                     )
+      ! kranke time-step tendencies
+                ,ru_tend=grid%ru_tend,ru_tend_adv=grid%ru_tend_adv                 &
+                ,ru_tend_pgf=grid%ru_tend_pgf,ru_tend_cor=grid%ru_tend_cor         &
+                ,ru_tend_curv=grid%ru_tend_curv,ru_tend_hdiff=grid%ru_tend_hdiff   &
+                ,ru_tend_phys=grid%ru_tend_phys,ru_tend_damp=grid%ru_tend_damp     &
+                ,ru_tend_vdiff=grid%ru_tend_vdiff,ru_tend_6diff=grid%ru_tend_6diff &
+                ,rv_tend=grid%rv_tend,rv_tend_adv=grid%rv_tend_adv                 &
+                ,rv_tend_pgf=grid%rv_tend_pgf,rv_tend_cor=grid%rv_tend_cor         &
+                ,rv_tend_curv=grid%rv_tend_curv,rv_tend_hdiff=grid%rv_tend_hdiff   &
+                ,rv_tend_phys=grid%rv_tend_phys,rv_tend_damp=grid%rv_tend_damp     &
+                ,rv_tend_vdiff=grid%rv_tend_vdiff,rv_tend_6diff=grid%rv_tend_6diff &
+      ! kranke accumulated tendencies
+                ,aru_tend=grid%aru_tend,aru_tend_adv=grid%aru_tend_adv                 &
+                ,aru_tend_pgf=grid%aru_tend_pgf,aru_tend_cor=grid%aru_tend_cor         &
+                ,aru_tend_curv=grid%aru_tend_curv,aru_tend_hdiff=grid%aru_tend_hdiff   &
+                ,aru_tend_phys=grid%aru_tend_phys,aru_tend_damp=grid%aru_tend_damp     &
+                ,aru_tend_vdiff=grid%aru_tend_vdiff,aru_tend_6diff=grid%aru_tend_6diff &
+                ,arv_tend=grid%arv_tend,arv_tend_adv=grid%arv_tend_adv                 &
+                ,arv_tend_pgf=grid%arv_tend_pgf,arv_tend_cor=grid%arv_tend_cor         &
+                ,arv_tend_curv=grid%arv_tend_curv,arv_tend_hdiff=grid%arv_tend_hdiff   &
+                ,arv_tend_phys=grid%arv_tend_phys,arv_tend_damp=grid%arv_tend_damp     &
+                ,arv_tend_vdiff=grid%arv_tend_vdiff,arv_tend_6diff=grid%arv_tend_6diff &
+                                                                                       )
 
       NWPDIAGS: IF ( config_flags%nwp_diagnostics == 1 ) THEN
       CALL wrf_debug ( 100 , '--> CALL DIAGNOSTICS PACKAGE: NWP DIAGNOSTICS' )

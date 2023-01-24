@@ -10,45 +10,53 @@ END MODULE module_diag_misc
 
 MODULE module_diag_misc
 CONTAINS
-   SUBROUTINE diagnostic_output_calc(                                 &
-                      ids,ide, jds,jde, kds,kde,                      &
-                      ims,ime, jms,jme, kms,kme,                      &
-                      ips,ipe, jps,jpe, kps,kpe,                      & ! patch  dims
-                      i_start,i_end,j_start,j_end,kts,kte,num_tiles   &
-                     ,dpsdt,dmudt                                     &
-                     ,p8w,pk1m,mu_2,mu_2m                             &
-                     ,raincv,rainncv,rainc,rainnc                     &
-                     ,i_rainc,i_rainnc                                &
-                     ,hfx,sfcevp,lh,t2                                &
-                     ,ACSWUPT,ACSWUPTC,ACSWDNT,ACSWDNTC               & ! Optional
-                     ,ACSWUPB,ACSWUPBC,ACSWDNB,ACSWDNBC               & ! Optional
-                     ,ACLWUPT,ACLWUPTC,ACLWDNT,ACLWDNTC               & ! Optional
-                     ,ACLWUPB,ACLWUPBC,ACLWDNB,ACLWDNBC               & ! Optional
-                     ,I_ACSWUPT,I_ACSWUPTC,I_ACSWDNT,I_ACSWDNTC       & ! Optional
-                     ,I_ACSWUPB,I_ACSWUPBC,I_ACSWDNB,I_ACSWDNBC       & ! Optional
-                     ,I_ACLWUPT,I_ACLWUPTC,I_ACLWDNT,I_ACLWDNTC       & ! Optional
-                     ,I_ACLWUPB,I_ACLWUPBC,I_ACLWDNB,I_ACLWDNBC       & ! Optional
-                     ,athmp, aqvmp                                    &
-                     ,athcu, aqvcu, aucu, avcu                        &
-                     ,athsh, aqvsh, aush, avsh                        &
-                     ,athbl, aqvbl, aubl, avbl                        &
-                     ,athralw, athrasw                                &
-                     ,h_diabatic, qv_diabatic                         &
-                     ,rthcuten, rqvcuten, rucuten, rvcuten            &
-                     ,rthshten, rqvshten, rushten, rvshten            &
-                     ,rthblten, rqvblten, rublten, rvblten            &
-                     ,rthratenlw, rthratensw                          &
-                     ,dt,xtime                                        &
-                     ,diag_print                                      &
-                     ,bucket_mm, bucket_J                             &
-                     ,prec_acc_c, prec_acc_nc, snow_acc_nc            &
-                     ,snowncv, prec_acc_dt, curr_secs2                &
-                     ,history_interval                                &
-                     ,itimestep                                       &
-                     ,cu_used, shcu_used, acc_phy_tend                &
-                     ,ru_tend, ru_tend_phys                           & ! kranke
-                     ,aru_tend, aru_tend_phys                         & ! kranke
-                                                                      )
+   SUBROUTINE diagnostic_output_calc(                                              &
+                      ids,ide, jds,jde, kds,kde,                                   &
+                      ims,ime, jms,jme, kms,kme,                                   &
+                      ips,ipe, jps,jpe, kps,kpe,                                   & ! patch  dims
+                      i_start,i_end,j_start,j_end,kts,kte,num_tiles                &
+                     ,dpsdt,dmudt                                                  &
+                     ,p8w,pk1m,mu_2,mu_2m                                          &
+                     ,raincv,rainncv,rainc,rainnc                                  &
+                     ,i_rainc,i_rainnc                                             &
+                     ,hfx,sfcevp,lh,t2                                             &
+                     ,ACSWUPT,ACSWUPTC,ACSWDNT,ACSWDNTC                            & ! Optional
+                     ,ACSWUPB,ACSWUPBC,ACSWDNB,ACSWDNBC                            & ! Optional
+                     ,ACLWUPT,ACLWUPTC,ACLWDNT,ACLWDNTC                            & ! Optional
+                     ,ACLWUPB,ACLWUPBC,ACLWDNB,ACLWDNBC                            & ! Optional
+                     ,I_ACSWUPT,I_ACSWUPTC,I_ACSWDNT,I_ACSWDNTC                    & ! Optional
+                     ,I_ACSWUPB,I_ACSWUPBC,I_ACSWDNB,I_ACSWDNBC                    & ! Optional
+                     ,I_ACLWUPT,I_ACLWUPTC,I_ACLWDNT,I_ACLWDNTC                    & ! Optional
+                     ,I_ACLWUPB,I_ACLWUPBC,I_ACLWDNB,I_ACLWDNBC                    & ! Optional
+                     ,athmp, aqvmp                                                 &
+                     ,athcu, aqvcu, aucu, avcu                                     &
+                     ,athsh, aqvsh, aush, avsh                                     &
+                     ,athbl, aqvbl, aubl, avbl                                     &
+                     ,athralw, athrasw                                             &
+                     ,h_diabatic, qv_diabatic                                      &
+                     ,rthcuten, rqvcuten, rucuten, rvcuten                         &
+                     ,rthshten, rqvshten, rushten, rvshten                         &
+                     ,rthblten, rqvblten, rublten, rvblten                         &
+                     ,rthratenlw, rthratensw                                       &
+                     ,dt,xtime                                                     &
+                     ,diag_print                                                   &
+                     ,bucket_mm, bucket_J                                          &
+                     ,prec_acc_c, prec_acc_nc, snow_acc_nc                         &
+                     ,snowncv, prec_acc_dt, curr_secs2                             &
+                     ,history_interval                                             &
+                     ,itimestep                                                    &
+                     ,cu_used, shcu_used, acc_phy_tend                             &
+                     ,ru_tend, ru_tend_adv, ru_tend_pgf, ru_tend_cor               & !kranke - add tendencies from here onwards
+                     ,ru_tend_curv, ru_tend_hdiff, ru_tend_phys, ru_tend_damp      &
+                     ,ru_tend_vdiff, ru_tend_6diff, rv_tend, rv_tend_adv           &
+                     ,rv_tend_pgf, rv_tend_cor, rv_tend_curv, rv_tend_hdiff        &
+                     ,rv_tend_phys, rv_tend_damp, rv_tend_vdiff, rv_tend_6diff     &
+                     ,aru_tend, aru_tend_adv, aru_tend_pgf, aru_tend_cor           &
+                     ,aru_tend_curv, aru_tend_hdiff, aru_tend_phys, aru_tend_damp  &
+                     ,aru_tend_vdiff, aru_tend_6diff, arv_tend, arv_tend_adv       &
+                     ,arv_tend_pgf, arv_tend_cor, arv_tend_curv, arv_tend_hdiff    &
+                     ,arv_tend_phys, arv_tend_damp, arv_tend_vdiff, arv_tend_6diff &
+                                                                                   )
 !----------------------------------------------------------------------
 
   USE module_dm, ONLY: wrf_dm_sum_real, wrf_dm_maxval
@@ -175,11 +183,33 @@ CONTAINS
                                          ,athcu,aqvcu,aucu,avcu    &
                                          ,athsh,aqvsh,aush,avsh    &
                                          ,athbl,aqvbl,aubl,avbl    &
-                                               ,athralw,athraswi   &
+                                               ,athralw,athrasw 
 
    ! kranke - Add accumulated tendencies
-   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(OUT) ::  &
-                                         ,aru_tend, aru_tend_phys  
+   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(OUT) ::           &
+                                          aru_tend, aru_tend_adv          &
+                                          aru_tend_pgf, aru_tend_cor      & 
+                                          aru_tend_curv, aru_tend_hdiff   & 
+                                          aru_tend_phys, aru_tend_damp    & 
+                                          aru_tend_vdiff, aru_tend_6diff  & 
+                                          arv_tend, arv_tend_adv          &
+                                          arv_tend_pgf, arv_tend_cor      &
+                                          arv_tend_curv, arv_tend_hdiff   &
+                                          arv_tend_phys, arv_tend_damp    &
+                                          arv_tend_vdiff, arv_tend_6diff 
+
+   ! kranke - Add time-step tendencies
+   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(OUT) ::         &
+                                          ru_tend, ru_tend_adv          &
+                                          ru_tend_pgf, ru_tend_cor      &
+                                          ru_tend_curv, ru_tend_hdiff   &
+                                          ru_tend_phys, ru_tend_damp    &
+                                          ru_tend_vdiff, ru_tend_6diff  &
+                                          rv_tend, rv_tend_adv          &
+                                          rv_tend_pgf, rv_tend_cor      &
+                                          rv_tend_curv, rv_tend_hdiff   &
+                                          rv_tend_phys, rv_tend_damp    &
+                                          rv_tend_vdiff, rv_tend_6diff
 
 
    REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(IN) ::   &
@@ -187,8 +217,7 @@ CONTAINS
                              ,rthcuten,rqvcuten,rucuten,rvcuten  &
                              ,rthshten,rqvshten,rushten,rvshten  &
                              ,rthblten,rqvblten,rublten,rvblten  &
-                                         ,rthratenlw,rthratensw  &
-                                         ,ru_tend,ru_tend_phys    !kranke
+                                         ,rthratenlw,rthratensw  
 
    INTEGER, DIMENSION( ims:ime , jms:jme ), INTENT(INOUT) ::     &
                                                        I_RAINC,  &
@@ -260,9 +289,6 @@ CONTAINS
              avbl(i,k,j) = 0.
           athralw(i,k,j) = 0.
           athrasw(i,k,j) = 0.
-          ! kranke reset accumulate tendencies to zero
-          aru_tend(i,k,j)      = 0.
-          aru_tend_phys(i,k,j) = 0.
          ENDDO
          ENDDO
          ENDDO
@@ -290,14 +316,90 @@ CONTAINS
          avbl(i,k,j)     = avbl(i,k,j)  +  rvblten(i,k,j)*dt
          athralw(i,k,j)  = athralw(i,k,j)  +  rthratenlw(i,k,j)*dt
          athrasw(i,k,j)  = athrasw(i,k,j)  +  rthratensw(i,k,j)*dt
-         aru_tend(i,k,j) = aru_tend(i,k,j)  +  ru_tend(i,k,j)*dt !kranke - Total tendency
-         ! kranke - Add here all decomposed accumulated tendencies
-         aru_tend_phys(i,k,j) = aru_tend(i,k,j)  +  ru_tend_phys(i,k,j)*dt
       ENDDO
       ENDDO
       ENDDO
     ENDDO
    ENDIF
+
+!----------------------------------------------------------------
+! kranke - Accumulated total and separated tendencies
+
+   !$OMP PARALLEL DO   &
+   !$OMP PRIVATE ( ij )
+   DO ij = 1 , num_tiles
+     
+     ! First reset accumulation to zero if it is the right time
+     IF (mod(curr_secs2, history_interval*60.) == 0.) THEN
+       WRITE(outstring,*) 'Reseting accumulation to 0'
+       CALL wrf_debug ( 10, TRIM(outstring) )
+       DO j=j_start(ij),j_end(ij)
+         DO k=kps,kpe
+           DO i=i_start(ij),i_end(ij)
+             ! u-tendencies
+             aru_tend(i,k,j)       = 0.
+             aru_tend_adv(i,k,j)   = 0.
+             aru_tend_pgf(i,k,j)   = 0.
+             aru_tend_cor(i,k,j)   = 0.
+             aru_tend_curv(i,k,j)  = 0.
+             aru_tend_hdiff(i,k,j) = 0.
+             aru_tend_phys(i,k,j)  = 0.
+             aru_tend_damp(i,k,j)  = 0.
+             aru_tend_vdiff(i,k,j) = 0.
+             aru_tend_6diff(i,k,j) = 0.
+             ! v-tendencies
+             arv_tend(i,k,j)       = 0.
+             arv_tend_adv(i,k,j)   = 0.
+             arv_tend_pgf(i,k,j)   = 0.
+             arv_tend_cor(i,k,j)   = 0.
+             arv_tend_curv(i,k,j)  = 0.
+             arv_tend_hdiff(i,k,j) = 0.
+             arv_tend_phys(i,k,j)  = 0.
+             arv_tend_damp(i,k,j)  = 0.
+             arv_tend_vdiff(i,k,j) = 0.
+             arv_tend_6diff(i,k,j) = 0.
+           ENDDO
+         ENDDO
+       ENDDO
+     ENDIF
+     
+     ! Now calculate tendencies
+     DO j=j_start(ij),j_end(ij)
+       DO k=kps,kpe
+         DO i=i_start(ij),i_end(ij)
+         
+           ! calculate factor to decouple tendency (mu * u --> u )
+           decfac = (c1h(k)*muu(i,j)+c2h(k))/msfu(i,j) 
+
+           ! u-tendencies
+           aru_tend(i,k,j)       = aru_tend(i,k,j)       +  ru_tend(i,k,j)*dt/decfac
+           aru_tend_adv(i,k,j)   = aru_tend_adv(i,k,j)   +  ru_tend_adv(i,k,j)*dt/decfac
+           aru_tend_pgf(i,k,j)   = aru_tend_pgf(i,k,j)   +  ru_tend_pgf(i,k,j)*dt/decfac
+           aru_tend_cor(i,k,j)   = aru_tend_cor(i,k,j)   +  ru_tend_cor(i,k,j)*dt/decfac
+           aru_tend_curv(i,k,j)  = aru_tend_curv(i,k,j)  +  ru_tend_curv(i,k,j)*dt/decfac
+           aru_tend_hdiff(i,k,j) = aru_tend_hdiff(i,k,j) +  ru_tend_hdiff(i,k,j)*dt/decfac
+           aru_tend_phys(i,k,j)  = aru_tend_phys(i,k,j)  +  ru_tend_phys(i,k,j)*dt/decfac
+           aru_tend_damp(i,k,j)  = aru_tend_damp(i,k,j)  +  ru_tend_damp(i,k,j)*dt/decfac
+           aru_tend_vdiff(i,k,j) = aru_tend_vdiff(i,k,j) +  ru_tend_vdiff(i,k,j)*dt/decfac
+           aru_tend_6diff(i,k,j) = aru_tend_6diff(i,k,j) +  ru_tend_6diff(i,k,j)*dt/decfac
+
+           ! v-tendencies
+           arv_tend(i,k,j)       = arv_tend(i,k,j)       +  rv_tend(i,k,j)*dt/decfac
+           arv_tend_adv(i,k,j)   = arv_tend_adv(i,k,j)   +  rv_tend_adv(i,k,j)*dt/decfac
+           arv_tend_pgf(i,k,j)   = arv_tend_pgf(i,k,j)   +  rv_tend_pgf(i,k,j)*dt/decfac
+           arv_tend_cor(i,k,j)   = arv_tend_cor(i,k,j)   +  rv_tend_cor(i,k,j)*dt/decfac
+           arv_tend_curv(i,k,j)  = arv_tend_curv(i,k,j)  +  rv_tend_curv(i,k,j)*dt/decfac
+           arv_tend_hdiff(i,k,j) = arv_tend_hdiff(i,k,j) +  rv_tend_hdiff(i,k,j)*dt/decfac
+           arv_tend_phys(i,k,j)  = arv_tend_phys(i,k,j)  +  rv_tend_phys(i,k,j)*dt/decfac
+           arv_tend_damp(i,k,j)  = arv_tend_damp(i,k,j)  +  rv_tend_damp(i,k,j)*dt/decfac
+           arv_tend_vdiff(i,k,j) = arv_tend_vdiff(i,k,j) +  rv_tend_vdiff(i,k,j)*dt/decfac
+           arv_tend_6diff(i,k,j) = arv_tend_6diff(i,k,j) +  rv_tend_6diff(i,k,j)*dt/decfac
+
+         ENDDO
+       ENDDO
+     ENDDO
+   ENDDO
+   !$OMP END PARALLEL DO
 
 !-----------------------------------------------------------------
 ! Handle accumulations with buckets to prevent round-off truncation in long runs
