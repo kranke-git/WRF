@@ -25,6 +25,7 @@ test/em_hill2d_x/README.namelist
 */*/*.f90
 */*/*/*.f90
 COMPILEW*
+.__afs*
 
 Registry/Registry
 Registry/io_boilerplate_temporary.inc
