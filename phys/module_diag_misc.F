@@ -853,7 +853,7 @@ CONTAINS
    SUBROUTINE diagnose_accumulated_tendencies(                                     &
                       ids,ide, jds,jde, kds,kde,                                   & ! domain dims (to check boundaries)
                       ims,ime, jms,jme, kms,kme,                                   & ! memory dims (patch + halo for MPI)
-                      ips,ipe, jps,jpe, kps,kpe,                                   & ! patch dims
+                      ips,ipe, jps,jpe, kps,kpe,                                   & ! patch dims  (patch=MPI-rank)
                       i_start,i_end,j_start,j_end,num_tiles,                       & ! tile dims (useless for MPI-only builds)
                       curr_secs2, history_interval,                                & ! time parameters
                       c1h, c2h, muu, muv, msfu, msfv, dt,                          & ! parameters to decouple tendencies (mu*u -> u) 
