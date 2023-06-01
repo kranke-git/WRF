@@ -313,6 +313,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount, Outcount, Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_get_dom_ti_double ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status )
+#  else
+        CALL ext_adios2_get_dom_ti_real ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -534,6 +544,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount, Outcount, Status )
 #  else
         CALL ext_pnc_get_dom_ti_real ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status )
+#  endif
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_get_dom_ti_double ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status )
+#  else
+        CALL ext_adios2_get_dom_ti_real ( Hndl, Element,   Data, &
                               locCount, Outcount, Status )
 #  endif
 #endif
@@ -763,6 +783,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount,  Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_put_dom_ti_double ( Hndl, Element,   Data, &
+                              locCount,  Status )
+#  else
+        CALL ext_adios2_put_dom_ti_real ( Hndl, Element,   Data, &
+                              locCount,  Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -987,6 +1017,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount,  Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_put_dom_ti_double ( Hndl, Element,   Data, &
+                              locCount,  Status )
+#  else
+        CALL ext_adios2_put_dom_ti_real ( Hndl, Element,   Data, &
+                              locCount,  Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -1198,6 +1238,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_dom_ti_double ( Hndl, Element,   Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_ti_double ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_dom_ti_double_arr ( Hndl, Element,   Data, &
@@ -1365,6 +1410,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_dom_ti_double ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_ti_double ( Hndl, Element,   Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -1538,6 +1588,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_dom_ti_double ( Hndl, Element,   Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_ti_double ( Hndl, Element,   Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_dom_ti_double_arr ( Hndl, Element,   Data, &
@@ -1705,6 +1760,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_dom_ti_double ( Hndl, Element,   Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_ti_double ( Hndl, Element,   Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -1878,6 +1938,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_dom_ti_integer ( Hndl, Element,   Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_ti_integer ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_dom_ti_integer_arr ( Hndl, Element,   Data, &
@@ -2045,6 +2110,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_dom_ti_integer ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_ti_integer ( Hndl, Element,   Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -2218,6 +2288,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_dom_ti_integer ( Hndl, Element,   Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_ti_integer ( Hndl, Element,   Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_dom_ti_integer_arr ( Hndl, Element,   Data, &
@@ -2385,6 +2460,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_dom_ti_integer ( Hndl, Element,   Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_ti_integer ( Hndl, Element,   Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -2558,6 +2638,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_dom_ti_logical ( Hndl, Element,   Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_ti_logical ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_dom_ti_logical_arr ( Hndl, Element,   Data, &
@@ -2725,6 +2810,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_dom_ti_logical ( Hndl, Element,   Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_ti_logical ( Hndl, Element,   Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -2898,6 +2988,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_dom_ti_logical ( Hndl, Element,   Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_ti_logical ( Hndl, Element,   Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_dom_ti_logical_arr ( Hndl, Element,   Data, &
@@ -3065,6 +3160,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_dom_ti_logical ( Hndl, Element,   Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_ti_logical ( Hndl, Element,   Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -3238,6 +3338,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_dom_ti_char ( Hndl, Element,   Data, &
                                Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_ti_char ( Hndl, Element,   Data, &
+                               Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_dom_ti_char_arr ( Hndl, Element,   Data, &
@@ -3407,6 +3512,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_dom_ti_char ( Hndl, Element,   Data, &
+                               Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_ti_char ( Hndl, Element,   Data, &
                                Status ) 
 #endif
 #ifdef PIO
@@ -3593,6 +3703,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount, Outcount, Status )
 #  else
         CALL ext_pnc_get_dom_td_real ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status )
+#  endif
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_get_dom_td_double ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status )
+#  else
+        CALL ext_adios2_get_dom_td_real ( Hndl, Element, DateStr,  Data, &
                               locCount, Outcount, Status )
 #  endif
 #endif
@@ -3817,6 +3937,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount, Outcount, Status )
 #  else
         CALL ext_pnc_get_dom_td_real ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status )
+#  endif
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_get_dom_td_double ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status )
+#  else
+        CALL ext_adios2_get_dom_td_real ( Hndl, Element, DateStr,  Data, &
                               locCount, Outcount, Status )
 #  endif
 #endif
@@ -4046,6 +4176,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount,  Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_put_dom_td_double ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status )
+#  else
+        CALL ext_adios2_put_dom_td_real ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -4270,6 +4410,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount,  Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_put_dom_td_double ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status )
+#  else
+        CALL ext_adios2_put_dom_td_real ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -4481,6 +4631,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_dom_td_double ( Hndl, Element, DateStr,  Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_td_double ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_dom_td_double_arr ( Hndl, Element, DateStr,  Data, &
@@ -4648,6 +4803,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_dom_td_double ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_td_double ( Hndl, Element, DateStr,  Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -4821,6 +4981,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_dom_td_double ( Hndl, Element, DateStr,  Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_td_double ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_dom_td_double_arr ( Hndl, Element, DateStr,  Data, &
@@ -4988,6 +5153,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_dom_td_double ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_td_double ( Hndl, Element, DateStr,  Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -5161,6 +5331,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_dom_td_integer ( Hndl, Element, DateStr,  Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_td_integer ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_dom_td_integer_arr ( Hndl, Element, DateStr,  Data, &
@@ -5328,6 +5503,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_dom_td_integer ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_td_integer ( Hndl, Element, DateStr,  Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -5501,6 +5681,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_dom_td_integer ( Hndl, Element, DateStr,  Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_td_integer ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_dom_td_integer_arr ( Hndl, Element, DateStr,  Data, &
@@ -5668,6 +5853,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_dom_td_integer ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_td_integer ( Hndl, Element, DateStr,  Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -5841,6 +6031,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_dom_td_logical ( Hndl, Element, DateStr,  Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_td_logical ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_dom_td_logical_arr ( Hndl, Element, DateStr,  Data, &
@@ -6008,6 +6203,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_dom_td_logical ( Hndl, Element, DateStr,  Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_td_logical ( Hndl, Element, DateStr,  Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -6181,6 +6381,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_dom_td_logical ( Hndl, Element, DateStr,  Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_td_logical ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_dom_td_logical_arr ( Hndl, Element, DateStr,  Data, &
@@ -6348,6 +6553,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_dom_td_logical ( Hndl, Element, DateStr,  Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_td_logical ( Hndl, Element, DateStr,  Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -6521,6 +6731,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_dom_td_char ( Hndl, Element, DateStr,  Data, &
                                Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_dom_td_char ( Hndl, Element, DateStr,  Data, &
+                               Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_dom_td_char_arr ( Hndl, Element, DateStr,  Data, &
@@ -6690,6 +6905,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_dom_td_char ( Hndl, Element, DateStr,  Data, &
+                               Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_dom_td_char ( Hndl, Element, DateStr,  Data, &
                                Status ) 
 #endif
 #ifdef PIO
@@ -6876,6 +7096,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount, Outcount, Status )
 #  else
         CALL ext_pnc_get_var_ti_real ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status )
+#  endif
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_get_var_ti_double ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status )
+#  else
+        CALL ext_adios2_get_var_ti_real ( Hndl, Element,  Varname, Data, &
                               locCount, Outcount, Status )
 #  endif
 #endif
@@ -7100,6 +7330,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount, Outcount, Status )
 #  else
         CALL ext_pnc_get_var_ti_real ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status )
+#  endif
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_get_var_ti_double ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status )
+#  else
+        CALL ext_adios2_get_var_ti_real ( Hndl, Element,  Varname, Data, &
                               locCount, Outcount, Status )
 #  endif
 #endif
@@ -7329,6 +7569,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount,  Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_put_var_ti_double ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status )
+#  else
+        CALL ext_adios2_put_var_ti_real ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -7553,6 +7803,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount,  Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_put_var_ti_double ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status )
+#  else
+        CALL ext_adios2_put_var_ti_real ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -7764,6 +8024,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_var_ti_double ( Hndl, Element,  Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_ti_double ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_var_ti_double_arr ( Hndl, Element,  Varname, Data, &
@@ -7931,6 +8196,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_var_ti_double ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_ti_double ( Hndl, Element,  Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -8104,6 +8374,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_var_ti_double ( Hndl, Element,  Varname, Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_ti_double ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_var_ti_double_arr ( Hndl, Element,  Varname, Data, &
@@ -8271,6 +8546,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_var_ti_double ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_ti_double ( Hndl, Element,  Varname, Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -8444,6 +8724,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_var_ti_integer ( Hndl, Element,  Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_ti_integer ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_var_ti_integer_arr ( Hndl, Element,  Varname, Data, &
@@ -8611,6 +8896,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_var_ti_integer ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_ti_integer ( Hndl, Element,  Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -8784,6 +9074,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_var_ti_integer ( Hndl, Element,  Varname, Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_ti_integer ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_var_ti_integer_arr ( Hndl, Element,  Varname, Data, &
@@ -8951,6 +9246,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_var_ti_integer ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_ti_integer ( Hndl, Element,  Varname, Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -9124,6 +9424,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_var_ti_logical ( Hndl, Element,  Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_ti_logical ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_var_ti_logical_arr ( Hndl, Element,  Varname, Data, &
@@ -9291,6 +9596,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_var_ti_logical ( Hndl, Element,  Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_ti_logical ( Hndl, Element,  Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -9464,6 +9774,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_var_ti_logical ( Hndl, Element,  Varname, Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_ti_logical ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_var_ti_logical_arr ( Hndl, Element,  Varname, Data, &
@@ -9631,6 +9946,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_var_ti_logical ( Hndl, Element,  Varname, Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_ti_logical ( Hndl, Element,  Varname, Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -9804,6 +10124,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_var_ti_char ( Hndl, Element,  Varname, Data, &
                                Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_ti_char ( Hndl, Element,  Varname, Data, &
+                               Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_var_ti_char_arr ( Hndl, Element,  Varname, Data, &
@@ -9973,6 +10298,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_var_ti_char ( Hndl, Element,  Varname, Data, &
+                               Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_ti_char ( Hndl, Element,  Varname, Data, &
                                Status ) 
 #endif
 #ifdef PIO
@@ -10159,6 +10489,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount, Outcount, Status )
 #  else
         CALL ext_pnc_get_var_td_real ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status )
+#  endif
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_get_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status )
+#  else
+        CALL ext_adios2_get_var_td_real ( Hndl, Element, DateStr, Varname, Data, &
                               locCount, Outcount, Status )
 #  endif
 #endif
@@ -10383,6 +10723,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount, Outcount, Status )
 #  else
         CALL ext_pnc_get_var_td_real ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status )
+#  endif
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_get_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status )
+#  else
+        CALL ext_adios2_get_var_td_real ( Hndl, Element, DateStr, Varname, Data, &
                               locCount, Outcount, Status )
 #  endif
 #endif
@@ -10612,6 +10962,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount,  Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_put_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status )
+#  else
+        CALL ext_adios2_put_var_td_real ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -10836,6 +11196,16 @@ IF ( Hndl .GT. -1 ) THEN
                               locCount,  Status )
 #  endif
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+#  if ( RWORDSIZE == DWORDSIZE )
+        CALL ext_adios2_put_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status )
+#  else
+        CALL ext_adios2_put_var_td_real ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status )
+#  endif
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
 #  if ( RWORDSIZE == DWORDSIZE )
@@ -11047,6 +11417,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_var_td_double_arr ( Hndl, Element, DateStr, Varname, Data, &
@@ -11214,6 +11589,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -11387,6 +11767,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_var_td_double_arr ( Hndl, Element, DateStr, Varname, Data, &
@@ -11554,6 +11939,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_td_double ( Hndl, Element, DateStr, Varname, Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -11727,6 +12117,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_var_td_integer ( Hndl, Element, DateStr, Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_td_integer ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_var_td_integer_arr ( Hndl, Element, DateStr, Varname, Data, &
@@ -11894,6 +12289,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_var_td_integer ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_td_integer ( Hndl, Element, DateStr, Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -12067,6 +12467,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_var_td_integer ( Hndl, Element, DateStr, Varname, Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_td_integer ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_var_td_integer_arr ( Hndl, Element, DateStr, Varname, Data, &
@@ -12234,6 +12639,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_var_td_integer ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_td_integer ( Hndl, Element, DateStr, Varname, Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -12407,6 +12817,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_var_td_logical ( Hndl, Element, DateStr, Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_td_logical ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_var_td_logical_arr ( Hndl, Element, DateStr, Varname, Data, &
@@ -12574,6 +12989,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_get_var_td_logical ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount, Outcount, Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_td_logical ( Hndl, Element, DateStr, Varname, Data, &
                               locCount, Outcount, Status ) 
 #endif
 #ifdef PIO
@@ -12747,6 +13167,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_put_var_td_logical ( Hndl, Element, DateStr, Varname, Data, &
                               locCount,  Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_td_logical ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_put_var_td_logical_arr ( Hndl, Element, DateStr, Varname, Data, &
@@ -12914,6 +13339,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_var_td_logical ( Hndl, Element, DateStr, Varname, Data, &
+                              locCount,  Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_td_logical ( Hndl, Element, DateStr, Varname, Data, &
                               locCount,  Status ) 
 #endif
 #ifdef PIO
@@ -13087,6 +13517,11 @@ IF ( Hndl .GT. -1 ) THEN
         CALL ext_pnc_get_var_td_char ( Hndl, Element, DateStr, Varname, Data, &
                                Status ) 
 #endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_get_var_td_char ( Hndl, Element, DateStr, Varname, Data, &
+                               Status ) 
+#endif
 #ifdef PIO
       CASE ( IO_PIO )
         CALL ext_pio_get_var_td_char_arr ( Hndl, Element, DateStr, Varname, Data, &
@@ -13256,6 +13691,11 @@ IF ( Hndl .GT. -1 ) THEN
 #ifdef PNETCDF
       CASE ( IO_PNETCDF   )
         CALL ext_pnc_put_var_td_char ( Hndl, Element, DateStr, Varname, Data, &
+                               Status ) 
+#endif
+#ifdef ADIOS2
+      CASE ( IO_ADIOS2   )
+        CALL ext_adios2_put_var_td_char ( Hndl, Element, DateStr, Varname, Data, &
                                Status ) 
 #endif
 #ifdef PIO

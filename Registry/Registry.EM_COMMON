@@ -229,7 +229,7 @@ state    real   v_g_tend       |       dyn_em      1         -      i3rh     "V_
 # Vertical Vel                                          
 state    real   w              ikjb     dyn_em      2         Z     \
         irhusdf=(bdy_interp:dt)  "w"                          "z-wind component"   "m s-1"
-state    real   ww             ikj     dyn_em      1         Z      r         "ww"   "mu-coupled eta-dot"    "Pa s-1"
+state    real   ww             ikj     dyn_em      1         Z      irh       "ww"   "mu-coupled eta-dot"    "Pa s-1"
 state    real   rw             ikj     dyn_em      1         Z      -         "rw"   "mu-coupled w"          "Pa m s-1"
 i1       real   ww1            ikj     dyn_em      1         Z                                          
 i1       real   wwE            ikj     dyn_em      1         Z      -         "wwE"  "Explicit vertical velocity" "Pa s-1"

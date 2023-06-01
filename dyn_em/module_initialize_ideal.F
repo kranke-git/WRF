@@ -180,7 +180,7 @@ CONTAINS
 
   ideal_constants: SELECT CASE ( model_config_rec%ideal_case )
   CASE ( hill2d_x )
-   hm = 275.22
+   hm = 0. ! kranke -- Modify here
    xa = 5.0
 
    icm = ide/2
