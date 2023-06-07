@@ -7,7 +7,7 @@ module load intel
 module load mvapich2/2.3.1   # This is for InfiniBand and MPI; should load intel too
 module unload R
 
-EXENAME='FLAT_EMHILL_PERTURB_T'
+EXENAME='FLAT_EMHILL_PERTURB_T_2D'
 
 export NETCDF='/afs/crc/group/EnvStat/build'
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
