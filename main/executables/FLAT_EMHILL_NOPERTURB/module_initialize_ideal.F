@@ -1427,38 +1427,45 @@ CONTAINS
   CASE (hill2d_x)
 !  thermal perturbation to kick off convection
 
-  DO I = its, min(ide-1,ite)
-    xrad = 0.
-    call random_number (randx)
-    randx = randx - 0.5
-    DO J = jts, min(jde-1,jte)
-      yrad = 0.
-      DO K = 1, 4
-        zrad = 0.
-        RAD=SQRT(xrad*xrad+yrad*yrad+zrad*zrad)
-        IF(RAD <= 1.) THEN
-           grid%t_1(i,k,j)=grid%t_1(i,k,j)+ 0.1 *randx
-           grid%t_2(i,k,j)=grid%t_1(i,k,j)
-           qvf = 1. + rvovrd*moist(i,k,j,P_QV)
-           grid%alt(i,k,j) = (r_d/p1000mb)*(grid%t_1(i,k,j)+t0)*qvf* &
-                        (((grid%p(i,k,j)+grid%pb(i,k,j))/p1000mb)**cvpm)
-           grid%al(i,k,j) = grid%alt(i,k,j) - grid%alb(i,k,j)
-        ENDIF
-      ENDDO
-!  rebalance hydrostatically
+!  write(6,*) ' nxc, nyc for perturbation ',nxc,nyc
+!  write(6,*) ' delt for perturbation ',delt
 
-      DO  kk  = 2,kte
-        k = kk - 1
-        grid%ph_1(i,kk,j) = grid%ph_1(i,kk-1,j) - (grid%dnw(kk-1))*(       &
-                     ((grid%c1h(k)*grid%mub(i,j)+grid%c2h(k))+(grid%c1h(k)*grid%mu_1(i,j)))*grid%al(i,kk-1,j)+ &
-                      (grid%c1h(k)*grid%mu_1(i,j))*grid%alb(i,kk-1,j)  )
+! For LES, change the initial random perturbations
+! For 2D test, call randx outside I-loop
+! For 3D runs, call randx inside both I-J loops
 
-        grid%ph_2(i,kk,j) = grid%ph_1(i,kk,j)
-        grid%ph0(i,kk,j) = grid%ph_1(i,kk,j) + grid%phb(i,kk,j)
-      ENDDO
-
-    ENDDO
-  ENDDO
+!  DO J = jts, min(jde-1,jte)
+!    yrad = 0.
+!    call random_number (randx)
+!    DO I = its, min(ide-1,ite)
+!      xrad = 0.
+!      randx = randx - 0.5
+!      DO K = 1, 4
+!        zrad = 0.
+!        RAD=SQRT(xrad*xrad+yrad*yrad+zrad*zrad)
+!        IF(RAD <= 1.) THEN
+!           grid%t_1(i,k,j)=grid%t_1(i,k,j)+ 0.1 *randx
+!           grid%t_2(i,k,j)=grid%t_1(i,k,j)
+!           qvf = 1. + rvovrd*moist(i,k,j,P_QV)
+!           grid%alt(i,k,j) = (r_d/p1000mb)*(grid%t_1(i,k,j)+t0)*qvf* &
+!                        (((grid%p(i,k,j)+grid%pb(i,k,j))/p1000mb)**cvpm)
+!           grid%al(i,k,j) = grid%alt(i,k,j) - grid%alb(i,k,j)
+!        ENDIF
+!      ENDDO
+!!  rebalance hydrostatically
+!
+!      DO  kk  = 2,kte
+!        k = kk - 1
+!        grid%ph_1(i,kk,j) = grid%ph_1(i,kk-1,j) - (grid%dnw(kk-1))*(       &
+!                     ((grid%c1h(k)*grid%mub(i,j)+grid%c2h(k))+(grid%c1h(k)*grid%mu_1(i,j)))*grid%al(i,kk-1,j)+ &
+!                      (grid%c1h(k)*grid%mu_1(i,j))*grid%alb(i,kk-1,j)  )
+!
+!        grid%ph_2(i,kk,j) = grid%ph_1(i,kk,j)
+!        grid%ph0(i,kk,j) = grid%ph_1(i,kk,j) + grid%phb(i,kk,j)
+!      ENDDO
+!
+!    ENDDO
+!  ENDDO
 
   END SELECT ideal_pert
 

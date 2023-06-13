@@ -23,7 +23,8 @@ echo 13 | ./configure   #Intel (serial)
 #./compile em_real
 ./compile em_hill2d_x
 
-mkdir                 main/executables/${EXENAME}
-cp -p main/ideal.exe  main/executables/${EXENAME}
+mkdir                                  main/executables/${EXENAME}
+cp -p main/ideal.exe                   main/executables/${EXENAME}
 #cp -p main/real.exe   main/executables/${EXENAME}
-cp -p main/wrf.exe    main/executables/${EXENAME}
+cp -p main/wrf.exe                     main/executables/${EXENAME}
+cp -p dyn_em/module_initialize_ideal.F main/executables/${EXENAME}
