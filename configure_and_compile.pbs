@@ -13,7 +13,7 @@ module unload R
 
 fsync $SGE_STDOUT_PATH &
 
-EXENAME='WRF4.5_REAL_DMPAR'
+EXENAME='WRF451REAL_DMPAR'
 
 export NETCDF='/afs/crc/group/EnvStat/build'
 export WRFIO_NCD_LARGE_FILE_SUPPORT=1
