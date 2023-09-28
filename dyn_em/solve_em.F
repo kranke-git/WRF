@@ -646,7 +646,9 @@ SUBROUTINE solve_em ( grid , config_flags  &
 BENCH_START(step_prep_tim)
      !$OMP PARALLEL DO   &
      !$OMP PRIVATE ( ij )
-
+!     WRITE(6,*) 'RK STEP is', rk_step 
+!     WRITE(6,*) 'Number of Small Time Steps is', number_of_small_timesteps 
+!     WRITE(6,*) 'RK time step is', dt_rk
      DO ij = 1 , grid%num_tiles
 
        CALL rk_step_prep  ( config_flags, rk_step,            &
@@ -1055,7 +1057,10 @@ BENCH_START(relax_bdy_dry_tim)
      END DO
      !$OMP END PARALLEL DO
 BENCH_END(relax_bdy_dry_tim)
-
+!     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
+!     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
+!     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
+!     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
 !<DESCRIPTION>
 !<pre>
 ! (3) Small (acoustic,sound) steps.
@@ -1095,6 +1100,8 @@ BENCH_START(small_step_prep_tim)
 
        CALL small_step_prep( grid%u_1,grid%u_2,grid%v_1,grid%v_2,grid%w_1,grid%w_2,   &
                              grid%t_1,grid%t_2,grid%ph_1,grid%ph_2,                   &
+                             grid%ru_tend_acst, grid%rv_tend_acst,                    & ! kranke
+                             grid%ru_tend_r, grid%rv_tend_r,                          & ! kranke
                              grid%mub, grid%mu_1, grid%mu_2,                          &
                              grid%muu, grid%muus, grid%muv, grid%muvs,                &
                              grid%mut, grid%muts, grid%mudf,                          &
@@ -1112,6 +1119,12 @@ BENCH_START(small_step_prep_tim)
                              grid%i_start(ij), grid%i_end(ij),                        &
                              grid%j_start(ij), grid%j_end(ij),                        &
                              k_start    , k_end                                       )
+!     WRITE(6,*) 'AFTER small_step_prep' 
+!     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
+!     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
+!     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
+!     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
+
  
        CALL calc_p_rho( grid%al, grid%p, grid%ph_2,                 &
                         grid%alt, grid%t_2, grid%t_save, c2a, pm1,  &
@@ -1285,8 +1298,10 @@ BENCH_END(set_phys_bc2_tim)
 BENCH_START(advance_uv_tim)
          CALL advance_uv ( grid%u_2, grid%ru_tend, grid%v_2, grid%rv_tend,        &
                            grid%p, grid%pb,                                       &
-                           grid%ph_2, grid%php, grid%alt,  grid%al,               &
-                           grid%mu_2, grid%muu, cqu, grid%muv, cqv, grid%mudf,    &
+                           grid%ph_2, grid%php, grid%alt,  grid%al, grid%mu_2,    &
+                           grid%ru_tend_acst, grid%rv_tend_acst,                  & ! kranke
+                           grid%ru_tend_r, grid%rv_tend_r,                        & ! kranke
+                           grid%muu, cqu, grid%muv, cqv, grid%mudf,               &
                            grid%c1h, grid%c2h, grid%c1f, grid%c2f,                &
                            grid%c3h, grid%c4h, grid%c3f, grid%c4f,                &
                            grid%msfux, grid%msfuy, grid%msfvx,                    &
@@ -1724,6 +1739,12 @@ BENCH_START(phys_bc_tim)
 BENCH_END(phys_bc_tim)
 
      END DO small_steps
+     
+!     WRITE(6,*) 'AFTER ACOUSTIC LOOP'
+!     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
+!     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
+!     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
+!     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
 
      !$OMP PARALLEL DO   &
      !$OMP PRIVATE ( ij )
@@ -1763,6 +1784,13 @@ BENCH_START(small_step_finish_tim)
                                grid%j_start(ij), grid%j_end(ij), &
                                k_start    , k_end               )
 !  call  to set ru_m, rv_m and ww_m b.c's for PD advection
+
+!     WRITE(6,*) 'AFTER small_step_finish'
+!     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
+!     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
+!     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
+!     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
+
 
        IF (rk_step == rk_order) THEN
 
@@ -4993,6 +5021,12 @@ BENCH_END(bc_2d_tim)
    end if
    firstime = .false.
 #endif
+
+!     WRITE(6,*) 'At the end of solve_em.F'
+!     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
+!     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
+!     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
+!     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
 
    RETURN
 

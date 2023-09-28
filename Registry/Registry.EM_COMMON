@@ -151,49 +151,63 @@ state   integer BATHYMETRY_FLAG -       misc        1        -     i0rh   "BATHY
 # new tendency variables for dynamical analysis - kranke
 # --------------------------------------------------------------------------------------
 
-state   real    ru_tend_adv     ikj     dyn_em          1               X               irh "RU_TEND_ADV"       "u-advection tendency" ""
-state   real    ru_tend_pgf     ikj     dyn_em          1               X               irh "RU_TEND_PGF"       "u-pressure gradient tendency" ""
-state   real    ru_tend_cor     ikj     dyn_em          1               X               irh "RU_TEND_COR"       "u-coriolis tendency" ""
-state   real    ru_tend_curv    ikj     dyn_em          1               X               irh "RU_TEND_CURV"      "u curvature gradient tendency" ""
-state   real    ru_tend_hdiff   ikj     dyn_em          1               X               irh "RU_TEND_HDIFF" "u horizontal diffusion tendency" ""
-state   real    ru_tend_phys    ikj     dyn_em          1               X               irh "RU_TEND_PHYS"      "total u physics tendency" ""
-state   real    ru_tend_damp    ikj     dyn_em          1               X               irh "RU_TEND_DAMP"      "u-damping tendency" ""
-state   real    ru_tend_vdiff   ikj     dyn_em          1               X               irh "RU_TEND_VDIFF"     "u vertical diffusion tendency" ""
-state   real    ru_tend_6diff   ikj     dyn_em          1               X               irh "RU_TEND_6DIFF"     "u 6th order diffusion tendency" ""
+state   real    ru_tend_adv     ikj     dyn_em          1               X               h "RU_TEND_ADV"       "u-advection tendency" ""
+state   real    ru_tend_pgf     ikj     dyn_em          1               X               h "RU_TEND_PGF"       "u-pressure gradient tendency" ""
+state   real    ru_tend_cor     ikj     dyn_em          1               X               h "RU_TEND_COR"       "u-coriolis tendency" ""
+state   real    ru_tend_curv    ikj     dyn_em          1               X               h "RU_TEND_CURV"      "u curvature gradient tendency" ""
+state   real    ru_tend_hdiff   ikj     dyn_em          1               X               h "RU_TEND_HDIFF" "u horizontal diffusion tendency" ""
+state   real    ru_tend_phys    ikj     dyn_em          1               X               h "RU_TEND_PHYS"      "total u physics tendency" ""
+state   real    ru_tend_damp    ikj     dyn_em          1               X               h "RU_TEND_DAMP"      "u-damping tendency" ""
+state   real    ru_tend_vdiff   ikj     dyn_em          1               X               h "RU_TEND_VDIFF"     "u vertical diffusion tendency" ""
+state   real    ru_tend_6diff   ikj     dyn_em          1               X               h "RU_TEND_6DIFF"     "u 6th order diffusion tendency" ""
 
-state   real    rv_tend_adv     ikj     dyn_em          1               Y               irh "RV_TEND_ADV"       "v-advection tendency" ""
-state   real    rv_tend_pgf     ikj     dyn_em          1               Y               irh "RV_TEND_PGF"       "v-pressure gradient tendency" ""
-state   real    rv_tend_cor     ikj     dyn_em          1               Y               irh "RV_TEND_COR"       "v-coriolis tendency" ""
-state   real    rv_tend_curv    ikj     dyn_em          1               Y               irh "RV_TEND_CURV"      "v curvature gradient tendency" ""
-state   real    rv_tend_hdiff   ikj     dyn_em          1               Y               irh "RV_TEND_HDIFF" "v horizontal diffusion tendency" ""
-state   real    rv_tend_phys    ikj     dyn_em          1               Y               irh "RV_TEND_PHYS"      "total v physics tendency" ""
-state   real    rv_tend_damp    ikj     dyn_em          1               Y               irh "RV_TEND_DAMP"      "v-damping tendency" ""
-state   real    rv_tend_vdiff   ikj     dyn_em          1               Y               irh "RV_TEND_VDIFF"     "v vertical diffusion tendency" ""
-state   real    rv_tend_6diff   ikj     dyn_em          1               Y               irh "RV_TEND_6DIFF"     "v 6th order diffusion tendency" ""
+state   real    rv_tend_adv     ikj     dyn_em          1               Y               h "RV_TEND_ADV"       "v-advection tendency" ""
+state   real    rv_tend_pgf     ikj     dyn_em          1               Y               h "RV_TEND_PGF"       "v-pressure gradient tendency" ""
+state   real    rv_tend_cor     ikj     dyn_em          1               Y               h "RV_TEND_COR"       "v-coriolis tendency" ""
+state   real    rv_tend_curv    ikj     dyn_em          1               Y               h "RV_TEND_CURV"      "v curvature gradient tendency" ""
+state   real    rv_tend_hdiff   ikj     dyn_em          1               Y               h "RV_TEND_HDIFF" "v horizontal diffusion tendency" ""
+state   real    rv_tend_phys    ikj     dyn_em          1               Y               h "RV_TEND_PHYS"      "total v physics tendency" ""
+state   real    rv_tend_damp    ikj     dyn_em          1               Y               h "RV_TEND_DAMP"      "v-damping tendency" ""
+state   real    rv_tend_vdiff   ikj     dyn_em          1               Y               h "RV_TEND_VDIFF"     "v vertical diffusion tendency" ""
+state   real    rv_tend_6diff   ikj     dyn_em          1               Y               h "RV_TEND_6DIFF"     "v 6th order diffusion tendency" ""
 
 # Accumulated ones
 
-state   real    aru_tend        ikj     dyn_em          1               X               irh "ARU_TEND"          "tstep accumulated u tendency" ""
-state   real    aru_tend_adv    ikj     dyn_em          1               X               irh "ARU_TEND_ADV"      "tstep accumulated u adv tendency" ""
-state   real    aru_tend_pgf    ikj     dyn_em          1               X               irh "ARU_TEND_PGF"      "tstep accumulated u pgf tendency" ""
-state   real    aru_tend_cor    ikj     dyn_em          1               X               irh "ARU_TEND_COR"      "tstep accumulated u cor tendency" ""
-state   real    aru_tend_curv   ikj     dyn_em          1               X               irh "ARU_TEND_CURV"     "tstep accumulated u curv tendency" ""
-state   real    aru_tend_hdiff  ikj     dyn_em          1               X               irh "ARU_TEND_HDIFF"    "tstep accumulated u hdiff tendency" ""
-state   real    aru_tend_phys   ikj     dyn_em          1               X               irh "ARU_TEND_PHYS"     "tstep accumulated u phys tendency" ""
-state   real    aru_tend_damp   ikj     dyn_em          1               X               irh "ARU_TEND_DAMP"     "tstep accumulated u damp tendency" ""
-state   real    aru_tend_vdiff  ikj     dyn_em          1               X               irh "ARU_TEND_VDIFF"    "tstep accumulated u vdiff tendency" ""
-state   real    aru_tend_6diff  ikj     dyn_em          1               X               irh "ARU_TEND_6DIFF"    "tstep accumulated u 6diff tendency" ""
+state   real    aru_tend        ikj     dyn_em          1               X               h "ARU_TEND"          "tstep accumulated u tendency" ""
+state   real    aru_tend_adv    ikj     dyn_em          1               X               h "ARU_TEND_ADV"      "tstep accumulated u adv tendency" ""
+state   real    aru_tend_pgf    ikj     dyn_em          1               X               h "ARU_TEND_PGF"      "tstep accumulated u pgf tendency" ""
+state   real    aru_tend_cor    ikj     dyn_em          1               X               h "ARU_TEND_COR"      "tstep accumulated u cor tendency" ""
+state   real    aru_tend_curv   ikj     dyn_em          1               X               h "ARU_TEND_CURV"     "tstep accumulated u curv tendency" ""
+state   real    aru_tend_hdiff  ikj     dyn_em          1               X               h "ARU_TEND_HDIFF"    "tstep accumulated u hdiff tendency" ""
+state   real    aru_tend_phys   ikj     dyn_em          1               X               h "ARU_TEND_PHYS"     "tstep accumulated u phys tendency" ""
+state   real    aru_tend_damp   ikj     dyn_em          1               X               h "ARU_TEND_DAMP"     "tstep accumulated u damp tendency" ""
+state   real    aru_tend_vdiff  ikj     dyn_em          1               X               h "ARU_TEND_VDIFF"    "tstep accumulated u vdiff tendency" ""
+state   real    aru_tend_6diff  ikj     dyn_em          1               X               h "ARU_TEND_6DIFF"    "tstep accumulated u 6diff tendency" ""
 
-state   real    arv_tend        ikj     dyn_em          1               Y               irh "ARV_TEND"          "tstep accumulated v tendency" ""
-state   real    arv_tend_adv    ikj     dyn_em          1               Y               irh "ARV_TEND_ADV"      "tstep accumulated v adv tendency" ""
-state   real    arv_tend_pgf    ikj     dyn_em          1               Y               irh "ARV_TEND_PGF"      "tstep accumulated v pgf tendency" ""
-state   real    arv_tend_cor    ikj     dyn_em          1               Y               irh "ARV_TEND_COR"      "tstep accumulated v cor tendency" ""
-state   real    arv_tend_curv   ikj     dyn_em          1               Y               irh "ARV_TEND_CURV"     "tstep accumulated v curv tendency" ""
-state   real    arv_tend_hdiff  ikj     dyn_em          1               Y               irh "ARV_TEND_HDIFF"    "tstep accumulated v hdiff tendency" ""
-state   real    arv_tend_phys   ikj     dyn_em          1               Y               irh "ARV_TEND_PHYS"     "tstep accumulated v phys tendency" ""
-state   real    arv_tend_damp   ikj     dyn_em          1               Y               irh "ARV_TEND_DAMP"     "tstep accumulated v damp tendency" ""
-state   real    arv_tend_vdiff  ikj     dyn_em          1               Y               irh "ARV_TEND_VDIFF"    "tstep accumulated v vdiff tendency" ""
-state   real    arv_tend_6diff  ikj     dyn_em          1               Y               irh "ARV_TEND_6DIFF"    "tstep accumulated v 6diff tendency" ""
+state   real    arv_tend        ikj     dyn_em          1               Y               h "ARV_TEND"          "tstep accumulated v tendency" ""
+state   real    arv_tend_adv    ikj     dyn_em          1               Y               h "ARV_TEND_ADV"      "tstep accumulated v adv tendency" ""
+state   real    arv_tend_pgf    ikj     dyn_em          1               Y               h "ARV_TEND_PGF"      "tstep accumulated v pgf tendency" ""
+state   real    arv_tend_cor    ikj     dyn_em          1               Y               h "ARV_TEND_COR"      "tstep accumulated v cor tendency" ""
+state   real    arv_tend_curv   ikj     dyn_em          1               Y               h "ARV_TEND_CURV"     "tstep accumulated v curv tendency" ""
+state   real    arv_tend_hdiff  ikj     dyn_em          1               Y               h "ARV_TEND_HDIFF"    "tstep accumulated v hdiff tendency" ""
+state   real    arv_tend_phys   ikj     dyn_em          1               Y               h "ARV_TEND_PHYS"     "tstep accumulated v phys tendency" ""
+state   real    arv_tend_damp   ikj     dyn_em          1               Y               h "ARV_TEND_DAMP"     "tstep accumulated v damp tendency" ""
+state   real    arv_tend_vdiff  ikj     dyn_em          1               Y               h "ARV_TEND_VDIFF"    "tstep accumulated v vdiff tendency" ""
+state   real    arv_tend_6diff  ikj     dyn_em          1               Y               h "ARV_TEND_6DIFF"    "tstep accumulated v 6diff tendency" ""
+
+# Acoustic analysis
+
+state   real    ru_tend_acst    ikj     dyn_em          1               X               h "RU_TEND_ACST"      "u-acoustic tendency" ""
+state   real    ru_tend_r       ikj     dyn_em          1               X               h "RU_TEND_R"         "ru_tend from acoustic time step" ""
+state   real    rv_tend_acst    ikj     dyn_em          1               Y               h "RV_TEND_ACST"      "v-acoustic tendency" ""
+state   real    rv_tend_r       ikj     dyn_em          1               Y               h "RV_TEND_R"         "rv_tend from acoustic time step" ""
+state   real    aru_tend_acst   ikj     dyn_em          1               X               h "ARU_TEND_ACST"     "Accumulated u-acoustic tendency" ""
+state   real    aru_tend_r      ikj     dyn_em          1               X               h "ARU_TEND_R"        "Accumulated ru_tend from acoustic time step" ""
+state   real    arv_tend_acst   ikj     dyn_em          1               Y               h "ARV_TEND_ACST"     "Accumulated v-acoustic tendency" ""
+state   real    arv_tend_r      ikj     dyn_em          1               Y               h "ARV_TEND_R"        "Accumulated rv_tend from acoustic time step" ""
+
+# Moisture analysis
+state   real    arq_tend_adv    ikj     dyn_em          1               -               h "ARQ_TEND_ADV"      "Accumulated RQVFTEN from acoustic time step" ""
 
 #-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 #                                               
@@ -1718,7 +1732,7 @@ state integer  STEPAVE_COUNT     -       misc        1         -      r      "ST
 
 #
 state    real  RTHFTEN          ikj     misc        1         -      r        "RTHFTEN"               "TOTAL ADVECTIVE POTENTIAL TEMPERATURE TENDENCY"  "K s-1"
-state    real  RQVFTEN          ikj     misc        1         -      r        "RQVFTEN"               "TOTAL ADVECTIVE MOISTURE TENDENCY"     "kg kg-1 s-1"
+state    real  RQVFTEN          ikj     misc        1         -      rh       "RQVFTEN"               "TOTAL ADVECTIVE MOISTURE TENDENCY"     "kg kg-1 s-1"
 
 state integer  STEPCU          -        misc        1         -      r        "STEPCU"                "NUMBER OF FUNDAMENTAL TIMESTEPS BETWEEN CONVECTION CALLS"  ""
                                                 

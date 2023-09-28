@@ -414,7 +414,7 @@ CONTAINS
                 ,J_START=grid%j_start,J_END=grid%j_end                                 & ! j-start;end vector for tiles in patch
                 ,NUM_TILES=grid%num_tiles                                              & ! Number of Tiles
                 ,CURR_SECS2=curr_secs2,HISTORY_INTERVAL=grid%history_interval          & ! Time Parameters
-                ,C1H=grid%c1h,C2H=grid%c2h,MUU=grid%muu,MUV=grid%muv                   & ! Decoupling parameters
+                ,C1H=grid%c1h,C2H=grid%c2h,MUUS=grid%muus,MUVS=grid%muvs               & ! Decoupling parameters
                 ,MSFU=grid%msfuy,MSFV=grid%msfvx,DT=grid%dt                            & ! Decoupling parameters
                 ! kranke time-step tendencies
                 ,ru_tend=grid%ru_tend,ru_tend_adv=grid%ru_tend_adv                     &
@@ -437,7 +437,11 @@ CONTAINS
                 ,arv_tend_pgf=grid%arv_tend_pgf,arv_tend_cor=grid%arv_tend_cor         &
                 ,arv_tend_curv=grid%arv_tend_curv,arv_tend_hdiff=grid%arv_tend_hdiff   &
                 ,arv_tend_phys=grid%arv_tend_phys,arv_tend_damp=grid%arv_tend_damp     &
-                ,arv_tend_vdiff=grid%arv_tend_vdiff,arv_tend_6diff=grid%arv_tend_6diff ) 
+                ,arv_tend_vdiff=grid%arv_tend_vdiff,arv_tend_6diff=grid%arv_tend_6diff & 
+                ,aru_tend_acst=grid%aru_tend_acst,arv_tend_acst=grid%arv_tend_acst     &
+                ,ru_tend_acst=grid%ru_tend_acst,rv_tend_acst=grid%rv_tend_acst         &
+                ,u_1=grid%u_1, u_2=grid%u_2,RQVFTEN=grid%RQVFTEN                       &
+                ,arq_tend_adv=grid%arq_tend_adv                                        ) 
 
 
       NWPDIAGS: IF ( config_flags%nwp_diagnostics == 1 ) THEN

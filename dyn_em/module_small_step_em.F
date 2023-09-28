@@ -15,6 +15,8 @@ CONTAINS
 
 SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
                             t_1, t_2, ph_1, ph_2,         &
+                            ru_tend_acst, rv_tend_acst,   & !kranke
+                            ru_tend_r, rv_tend_r,         & !kranke
                             mub, mu_1, mu_2,              &
                             muu, muus, muv, muvs,         &
                             mut, muts, mudf,              &
@@ -47,7 +49,12 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
                                                               v_1,   &
                                                               w_1,   &
                                                               t_1,   &
-                                                              ph_1
+                                                              ph_1,  &
+                                                              ru_tend_acst, &
+                                                              ru_tend_r,    &
+                                                              rv_tend_acst, &
+                                                              rv_tend_r
+
 
   REAL, DIMENSION(ims:ime, kms:kme, jms:jme),INTENT(  OUT) :: u_save,   &
                                                               v_save,   &
@@ -287,6 +294,37 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
       ENDDO
       ENDDO
 
+!    kranke -- Init acoustic and R tendencies
+
+    IF ((rk_step == 3) ) THEN
+      
+      ! u variables
+      DO j=j_start, j_end
+      DO k=k_start, k_end
+      DO i=i_start, i_endu
+        ru_tend_acst(i,k,j) = 0.0
+        ru_tend_r(i,k,j)    = 0.0
+      ENDDO
+      ENDDO
+      ENDDO
+
+      ! v variables
+      DO j=j_start, j_endv
+      DO k=k_start, k_end
+      DO i=i_start, i_end
+        rv_tend_acst(i,k,j) = 0.0
+        rv_tend_r(i,k,j)    = 0.0
+      ENDDO
+      ENDDO
+      ENDDO
+
+    END IF
+    
+!    WRITE(6,*) 'INSIDE small_step_prep' 
+!    WRITE(6,*) 'cfac_s is', c1h(25)*muus(25,5)+c2h(25)
+!    WRITE(6,*) 'cfac is', c1h(25)*muu(25,5)+c2h(25)
+!    WRITE(6,*) 'Map Scale Factor is', msfuy(i,j)
+
 END SUBROUTINE small_step_prep
 
 !-------------------------------------------------------------------------
@@ -365,6 +403,11 @@ SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
 !  from the coupled perturbation variables used in the small timesteps.
 !
 !</DESCRIPTION>
+
+!  WRITE(6,*) 'INSIDE small_step_finish' 
+!  WRITE(6,*) 'cfac_s is', c1h(25)*muus(25,5)+c2h(25)
+!  WRITE(6,*) 'cfac is', c1h(25)*muu(25,5)+c2h(25)
+!  WRITE(6,*) 'Map Scale Factor is', msfuy(25,5)
 
   i_start = its
   i_end   = min(ite,ide-1)
@@ -654,6 +697,8 @@ END SUBROUTINE calc_coef_w
 SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
                         p, pb,                         &
                         ph, php, alt, al, mu,          &
+                        ru_tend_acst, rv_tend_acst,    & ! kranke
+                        ru_tend_r, rv_tend_r,          & ! kranke
                         muu, cqu, muv, cqv, mudf,      &
                         c1h, c2h, c1f, c2f,            &
                         c3h, c4h, c3f, c4f,            &
@@ -678,8 +723,13 @@ SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
       REAL, DIMENSION( ims:ime , kms:kme, jms:jme ),  &
             INTENT(INOUT) ::                          &
                                                   u,  &
-                                                  v
-      REAL, DIMENSION( ims:ime , kms:kme, jms:jme ), &
+                                                  v,  &
+                                                  ru_tend_r,    &
+                                                  ru_tend_acst, &
+                                                  rv_tend_r,    &
+                                                  rv_tend_acst
+
+      REAL, DIMENSION( ims:ime , kms:kme, jms:jme ),  &
             INTENT(IN   ) ::                          &
                                              ru_tend, &
                                              rv_tend, &
@@ -803,6 +853,7 @@ SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
    DO k = k_start, k_end
    DO i = i_start_u_tend, i_end_u_tend
      u(i,k,j) = u(i,k,j) + dts*ru_tend(i,k,j)
+     ru_tend_r(i,k,j) = ru_tend_r(i,k,j) + dts*ru_tend(i,k,j)
    ENDDO
    ENDDO
    DO i = i_start_up, i_end_up
@@ -866,14 +917,20 @@ SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
    DO k = k_start, k_end
      DO i = i_start_up, i_end_up
        u(i,k,j)=u(i,k,j)-dts*cqu(i,k,j)*dpxy(i,k)+(c1h(k)*mudf_xy(i))
+       ru_tend_acst(i,k,j)=-dts*cqu(i,k,j)*dpxy(i,k)+(c1h(k)*mudf_xy(i)) + ru_tend_acst(i,k,j)
      ENDDO
    ENDDO
+!   IF ( j .eq. 5 ) THEN
+!     WRITE(6,*) '--- Inside acoustic loop: ACOUSTIC part of change is', -dts*cqu(25,25,j)*dpxy(25,25)+(c1h(25)*mudf_xy(25))
+!   ENDIF
    ENDDO u_outer_j_loop
+!   WRITE(6,*) '--- Inside acoustic loop: RU_TEND part of change is',  dts*ru_tend(25,25,5)
 ! now v
   v_outer_j_loop: DO j = j_start_v_tend, j_end_v_tend
    DO k = k_start, k_end
    DO i = i_start, i_end
      v(i,k,j) = v(i,k,j) + dts*rv_tend(i,k,j)
+     rv_tend_r(i,k,j) = rv_tend_r(i,k,j) + dts*rv_tend(i,k,j)
    ENDDO
    ENDDO
    DO i = i_start, i_end
@@ -940,6 +997,7 @@ SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
      DO k = k_start, k_end
        DO i = i_start, i_end
          v(i,k,j)=v(i,k,j)-dts*cqv(i,k,j)*dpxy(i,k)+(c1h(k)*mudf_xy(i))
+         rv_tend_acst(i,k,j) = rv_tend_acst(i,k,j) - dts*cqv(i,k,j)*dpxy(i,k)+(c1h(k)*mudf_xy(i))
        ENDDO
      ENDDO
    END IF

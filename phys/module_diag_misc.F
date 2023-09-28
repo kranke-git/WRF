@@ -850,24 +850,25 @@ CONTAINS
 ! kranke - Jan 2023 ----------------------------------------------
 ! New Subroutine to diagnose accumulated tendencies
 
-   SUBROUTINE diagnose_accumulated_tendencies(                                     &
-                      ids,ide, jds,jde, kds,kde,                                   & ! domain dims (to check boundaries)
-                      ims,ime, jms,jme, kms,kme,                                   & ! memory dims (patch + halo for MPI)
-                      ips,ipe, jps,jpe, kps,kpe,                                   & ! patch dims  (patch=MPI-rank)
-                      i_start,i_end,j_start,j_end,num_tiles,                       & ! tile dims (useless for MPI-only builds)
-                      curr_secs2, history_interval,                                & ! time parameters
-                      c1h, c2h, muu, muv, msfu, msfv, dt,                          & ! parameters to decouple tendencies (mu*u -> u) 
-                      ru_tend, ru_tend_adv, ru_tend_pgf, ru_tend_cor,              &
-                      ru_tend_curv, ru_tend_hdiff, ru_tend_phys, ru_tend_damp,     &
-                      ru_tend_vdiff, ru_tend_6diff, rv_tend, rv_tend_adv,          &
-                      rv_tend_pgf, rv_tend_cor, rv_tend_curv, rv_tend_hdiff,       &
-                      rv_tend_phys, rv_tend_damp, rv_tend_vdiff, rv_tend_6diff,    &
-                      aru_tend, aru_tend_adv, aru_tend_pgf, aru_tend_cor,          &
-                      aru_tend_curv, aru_tend_hdiff, aru_tend_phys, aru_tend_damp, &
-                      aru_tend_vdiff, aru_tend_6diff, arv_tend, arv_tend_adv,      &
-                      arv_tend_pgf, arv_tend_cor, arv_tend_curv, arv_tend_hdiff,   &
-                      arv_tend_phys, arv_tend_damp, arv_tend_vdiff, arv_tend_6diff &
-                                                                                   )
+   SUBROUTINE diagnose_accumulated_tendencies(                                      &
+                      ids,ide, jds,jde, kds,kde,                                    & ! domain dims (to check boundaries)
+                      ims,ime, jms,jme, kms,kme,                                    & ! memory dims (patch + halo for MPI)
+                      ips,ipe, jps,jpe, kps,kpe,                                    & ! patch dims  (patch=MPI-rank)
+                      i_start,i_end,j_start,j_end,num_tiles,                        & ! tile dims (useless for MPI-only builds)
+                      curr_secs2, history_interval,                                 & ! time parameters
+                      c1h, c2h, muus, muvs, msfu, msfv, dt,                         & ! parameters to decouple tendencies (mu*u -> u) 
+                      ru_tend, ru_tend_adv, ru_tend_pgf, ru_tend_cor,               &
+                      ru_tend_curv, ru_tend_hdiff, ru_tend_phys, ru_tend_damp,      &
+                      ru_tend_vdiff, ru_tend_6diff, rv_tend, rv_tend_adv,           &
+                      rv_tend_pgf, rv_tend_cor, rv_tend_curv, rv_tend_hdiff,        &
+                      rv_tend_phys, rv_tend_damp, rv_tend_vdiff, rv_tend_6diff,     &
+                      aru_tend, aru_tend_adv, aru_tend_pgf, aru_tend_cor,           &
+                      aru_tend_curv, aru_tend_hdiff, aru_tend_phys, aru_tend_damp,  &
+                      aru_tend_vdiff, aru_tend_6diff, arv_tend, arv_tend_adv,       &
+                      arv_tend_pgf, arv_tend_cor, arv_tend_curv, arv_tend_hdiff,    &
+                      arv_tend_phys, arv_tend_damp, arv_tend_vdiff, arv_tend_6diff, &
+                      aru_tend_acst, arv_tend_acst, ru_tend_acst, rv_tend_acst,     &
+                      u_1, u_2, RQVFTEN, arq_tend_adv                               )
    !----------------------------------------------------------------------
    IMPLICIT NONE
    
@@ -895,10 +896,12 @@ CONTAINS
                                           arv_tend_pgf, arv_tend_cor,     &
                                           arv_tend_curv, arv_tend_hdiff,  &
                                           arv_tend_phys, arv_tend_damp,   &
-                                          arv_tend_vdiff, arv_tend_6diff
+                                          arv_tend_vdiff, arv_tend_6diff, &
+                                          aru_tend_acst, arv_tend_acst,   &
+                                          arq_tend_adv
 
    ! Time-Step Wide tendencies
-   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(INOUT) ::       &
+   REAL, DIMENSION( ims:ime, kms:kme, jms:jme ), INTENT(IN) ::          &
                                           ru_tend, ru_tend_adv,         &
                                           ru_tend_pgf, ru_tend_cor,     &
                                           ru_tend_curv, ru_tend_hdiff,  &
@@ -908,7 +911,9 @@ CONTAINS
                                           rv_tend_pgf, rv_tend_cor,     &
                                           rv_tend_curv, rv_tend_hdiff,  &
                                           rv_tend_phys, rv_tend_damp,   &
-                                          rv_tend_vdiff, rv_tend_6diff
+                                          rv_tend_vdiff, rv_tend_6diff, &
+                                          ru_tend_acst, rv_tend_acst,   &
+                                          u_1, u_2, RQVFTEN    
 
    ! Time parameters
    REAL,  INTENT(IN   ) :: dt, curr_secs2
@@ -916,7 +921,7 @@ CONTAINS
     
    ! Parameters for decoupling
    REAL , DIMENSION( kms:kme ) ,    INTENT(IN   ) :: c1h, c2h
-   REAL , DIMENSION( ims:ime , jms:jme ) , INTENT(IN   ) :: muu, muv, msfu, msfv
+   REAL , DIMENSION( ims:ime , jms:jme ) , INTENT(IN   ) :: muus, muvs, msfu, msfv
    REAL :: decfac
   
 !----------------------------------------------------------------
@@ -955,6 +960,7 @@ CONTAINS
              aru_tend_damp(i,k,j)  = 0.
              aru_tend_vdiff(i,k,j) = 0.
              aru_tend_6diff(i,k,j) = 0.
+             aru_tend_acst(i,k,j)  = 0.
            ENDDO
          ENDDO
        ENDDO
@@ -973,6 +979,16 @@ CONTAINS
              arv_tend_damp(i,k,j)  = 0.
              arv_tend_vdiff(i,k,j) = 0.
              arv_tend_6diff(i,k,j) = 0.
+             arv_tend_acst(i,k,j)  = 0.
+           ENDDO
+         ENDDO
+       ENDDO
+
+       ! q-tendencies
+       DO j=jts,jtf     ! unstaggered
+         DO k=kts,ktf   ! unstaggered
+           DO i=its,itf ! unstaggered
+             arq_tend_adv(i,k,j)   = 0.
            ENDDO
          ENDDO
        ENDDO
@@ -984,7 +1000,7 @@ CONTAINS
          DO k=kts,ktf   ! unstaggered
            DO i=its,ite ! staggered
              ! calculate factor to decouple tendency (mu * u --> u )
-             decfac = (c1h(k)*muu(i,j)+c2h(k))/msfu(i,j)
+             decfac = (c1h(k)*muus(i,j)+c2h(k))/msfu(i,j)
              ! u-tendencies      
              aru_tend(i,k,j)       = aru_tend(i,k,j)       +  ru_tend(i,k,j)*dt/decfac
              aru_tend_adv(i,k,j)   = aru_tend_adv(i,k,j)   +  ru_tend_adv(i,k,j)*dt/decfac
@@ -996,6 +1012,7 @@ CONTAINS
              aru_tend_damp(i,k,j)  = aru_tend_damp(i,k,j)  +  ru_tend_damp(i,k,j)*dt/decfac
              aru_tend_vdiff(i,k,j) = aru_tend_vdiff(i,k,j) +  ru_tend_vdiff(i,k,j)*dt/decfac
              aru_tend_6diff(i,k,j) = aru_tend_6diff(i,k,j) +  ru_tend_6diff(i,k,j)*dt/decfac
+             aru_tend_acst(i,k,j)  = aru_tend_acst(i,k,j)  +  ru_tend_acst(i,k,j)/decfac ! Note: no dt
            ENDDO
          ENDDO
        ENDDO
@@ -1004,7 +1021,7 @@ CONTAINS
          DO k=kts,ktf   ! unstaggered
            DO i=its,itf ! unstaggered
            ! calculate factor to decouple tendency (mu * u --> u )
-           decfac = (c1h(k)*muv(i,j)+c2h(k))/msfv(i,j)
+           decfac = (c1h(k)*muvs(i,j)+c2h(k))/msfv(i,j)
            ! v-tendencies
            arv_tend(i,k,j)       = arv_tend(i,k,j)       +  rv_tend(i,k,j)*dt/decfac
            arv_tend_adv(i,k,j)   = arv_tend_adv(i,k,j)   +  rv_tend_adv(i,k,j)*dt/decfac
@@ -1016,9 +1033,20 @@ CONTAINS
            arv_tend_damp(i,k,j)  = arv_tend_damp(i,k,j)  +  rv_tend_damp(i,k,j)*dt/decfac
            arv_tend_vdiff(i,k,j) = arv_tend_vdiff(i,k,j) +  rv_tend_vdiff(i,k,j)*dt/decfac
            arv_tend_6diff(i,k,j) = arv_tend_6diff(i,k,j) +  rv_tend_6diff(i,k,j)*dt/decfac
+           arv_tend_acst(i,k,j)  = arv_tend_acst(i,k,j)  +  rv_tend_acst(i,k,j)/decfac      ! Note: no dt
          ENDDO
        ENDDO
      ENDDO
+
+       ! q-tendencies
+       DO j=jts,jtf     ! unstaggered
+         DO k=kts,ktf   ! unstaggered
+           DO i=its,itf ! unstaggered
+             arq_tend_adv(i,k,j) = arq_tend_adv(i,k,j) + RQVFTEN(i,k,j)*dt
+           ENDDO
+         ENDDO
+       ENDDO
+
    ENDDO
    !$OMP END PARALLEL DO
    !----------------------------------------------------------------

@@ -1,0 +1,1 @@
+-:h:0:ru_tend_adv,ru_tend_pgf,ru_tend_cor,ru_tend_curv,ru_tend_hdiff,ru_tend_phys,ru_tend_damp,ru_tend_vdiff,ru_tend_6diff,rv_tend_adv,rv_tend_pgf,rv_tend_cor,rv_tend_curv,rv_tend_hdiff,rv_tend_phys,rv_tend_damp,rv_tend_vdiff,rv_tend_6diff,ru_tend,rv_tend
