@@ -1428,7 +1428,7 @@ CONTAINS
 
 !  thermal perturbation to kick off convection
     DO I = its, min(ide-1,ite)
-!     call random_number (randx)
+!      call random_number (randx)
 !      randx = randx - 0.5
        IF (MOD( I, 2 )) THEN
          randx = 1
@@ -1436,7 +1436,7 @@ CONTAINS
          randx = -1
        ENDIF
       DO J = jts, min(jde-1,jte)
-        DO K = 1, 1
+        DO K = 1, 2
            grid%t_1(i,k,j)=grid%t_1(i,k,j) + 0.1 * randx
            grid%t_2(i,k,j)=grid%t_1(i,k,j)
            qvf = 1. + rvovrd*moist(i,k,j,P_QV)
@@ -1451,7 +1451,8 @@ CONTAINS
                      ((grid%c1h(k)*grid%mub(i,j)+grid%c2h(k))+(grid%c1h(k)*grid%mu_1(i,j)))*grid%al(i,kk-1,j)+ &
                       (grid%c1h(k)*grid%mu_1(i,j))*grid%alb(i,kk-1,j)  )
 
-       grid%ph_2(i,kk,j) = grid%ph_1(i,kk,j) !       grid%ph0(i,kk,j) = grid%ph_1(i,kk,j) + grid%phb(i,kk,j)
+        grid%ph_2(i,kk,j) = grid%ph_1(i,kk,j)
+        grid%ph0(i,kk,j) = grid%ph_1(i,kk,j) + grid%phb(i,kk,j)
       ENDDO
 
     ENDDO

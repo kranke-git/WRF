@@ -1427,35 +1427,35 @@ CONTAINS
   CASE (hill2d_x)
 
 !  thermal perturbation to kick off convection
-    DO I = its, min(ide-1,ite)
-!     call random_number (randx)
+!    DO I = its, min(ide-1,ite)
+!      call random_number (randx)
 !      randx = randx - 0.5
-       IF (MOD( I, 2 )) THEN
-         randx = 1
-       ELSE
-         randx = -1
-       ENDIF
-      DO J = jts, min(jde-1,jte)
-        DO K = 1, 1
-           grid%t_1(i,k,j)=grid%t_1(i,k,j) + 0.1 * randx
-           grid%t_2(i,k,j)=grid%t_1(i,k,j)
-           qvf = 1. + rvovrd*moist(i,k,j,P_QV)
-           grid%alt(i,k,j) = (r_d/p1000mb)*(grid%t_1(i,k,j)+t0)*qvf* &
-                        (((grid%p(i,k,j)+grid%pb(i,k,j))/p1000mb)**cvpm)
-           grid%al(i,k,j) = grid%alt(i,k,j) - grid%alb(i,k,j)
-      ENDDO
+!       IF (MOD( I, 2 )) THEN
+!         randx = 1
+!       ELSE
+!         randx = -1
+!       ENDIF
+!      DO J = jts, min(jde-1,jte)
+!        DO K = 1, 2
+!           grid%t_1(i,k,j)=grid%t_1(i,k,j) + 0.1 * randx
+!           grid%t_2(i,k,j)=grid%t_1(i,k,j)
+!           qvf = 1. + rvovrd*moist(i,k,j,P_QV)
+!           grid%alt(i,k,j) = (r_d/p1000mb)*(grid%t_1(i,k,j)+t0)*qvf* &
+!                        (((grid%p(i,k,j)+grid%pb(i,k,j))/p1000mb)**cvpm)
+!           grid%al(i,k,j) = grid%alt(i,k,j) - grid%alb(i,k,j)
+!      ENDDO
 !  rebalance hydrostatically
-      DO  kk  = 2,kte
-        k = kk - 1
-        grid%ph_1(i,kk,j) = grid%ph_1(i,kk-1,j) - (grid%dnw(kk-1))*(       &
-                     ((grid%c1h(k)*grid%mub(i,j)+grid%c2h(k))+(grid%c1h(k)*grid%mu_1(i,j)))*grid%al(i,kk-1,j)+ &
-                      (grid%c1h(k)*grid%mu_1(i,j))*grid%alb(i,kk-1,j)  )
+!      DO  kk  = 2,kte
+!        k = kk - 1
+!        grid%ph_1(i,kk,j) = grid%ph_1(i,kk-1,j) - (grid%dnw(kk-1))*(       &
+!                     ((grid%c1h(k)*grid%mub(i,j)+grid%c2h(k))+(grid%c1h(k)*grid%mu_1(i,j)))*grid%al(i,kk-1,j)+ &
+!                      (grid%c1h(k)*grid%mu_1(i,j))*grid%alb(i,kk-1,j)  )
+!
+!       grid%ph_2(i,kk,j) = grid%ph_1(i,kk,j) !       grid%ph0(i,kk,j) = grid%ph_1(i,kk,j) + grid%phb(i,kk,j)
+!      ENDDO
 
-       grid%ph_2(i,kk,j) = grid%ph_1(i,kk,j) !       grid%ph0(i,kk,j) = grid%ph_1(i,kk,j) + grid%phb(i,kk,j)
-      ENDDO
-
-    ENDDO
-  ENDDO
+!    ENDDO
+!  ENDDO
 
   END SELECT ideal_pert
 
