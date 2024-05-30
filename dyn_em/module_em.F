@@ -2273,8 +2273,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
    IF (config_flags%cu_physics .gt. 0) THEN
 
       DO J=jts,jtf
-      DO I=its,itf
       DO K=kts,ktf
+      DO I=its,itf
          RUCUTEN(I,K,J) =(c1(k)*mut(I,J)+c2(k))*RUCUTEN(I,K,J)
          RVCUTEN(I,K,J) =(c1(k)*mut(I,J)+c2(k))*RVCUTEN(I,K,J)
          RTHCUTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RTHCUTEN(I,K,J)
@@ -2285,8 +2285,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF (P_QC .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQCCUTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQCCUTEN(I,K,J)
          ENDDO
          ENDDO
@@ -2295,8 +2295,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF (P_QR .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQRCUTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQRCUTEN(I,K,J)
          ENDDO
          ENDDO
@@ -2305,8 +2305,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF (P_QI .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQICUTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQICUTEN(I,K,J)
          ENDDO
          ENDDO
@@ -2315,8 +2315,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF(P_QS .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQSCUTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQSCUTEN(I,K,J)
          ENDDO
          ENDDO
@@ -2330,8 +2330,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
    IF (config_flags%shcu_physics .gt. 0) THEN
 
       DO J=jts,jtf
-      DO I=its,itf
       DO K=kts,ktf
+      DO I=its,itf
          RUSHTEN(I,K,J) =(c1(k)*mut(I,J)+c2(k))*RUSHTEN(I,K,J)
          RVSHTEN(I,K,J) =(c1(k)*mut(I,J)+c2(k))*RVSHTEN(I,K,J)
          RTHSHTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RTHSHTEN(I,K,J)
@@ -2342,8 +2342,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF (P_QC .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQCSHTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQCSHTEN(I,K,J)
          ENDDO
          ENDDO
@@ -2352,8 +2352,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF (P_QR .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQRSHTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQRSHTEN(I,K,J)
          ENDDO
          ENDDO
@@ -2362,8 +2362,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF (P_QI .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQISHTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQISHTEN(I,K,J)
          ENDDO
          ENDDO
@@ -2372,8 +2372,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF(P_QS .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQSSHTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQSSHTEN(I,K,J)
          ENDDO
          ENDDO
@@ -2382,8 +2382,8 @@ SUBROUTINE calculate_phy_tend (config_flags,c1,c2,                     &
 
       IF(P_QG .ge. PARAM_FIRST_SCALAR)THEN
          DO J=jts,jtf
-         DO I=its,itf
          DO K=kts,ktf
+         DO I=its,itf
             RQGSHTEN(I,K,J)=(c1(k)*mut(I,J)+c2(k))*RQGSHTEN(I,K,J)
          ENDDO
          ENDDO
