@@ -519,6 +519,9 @@ SUBROUTINE Transpose_grib(MemoryOrder, di, FieldType, Field, &
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
 
   CHARACTER (LEN=*),INTENT(IN)    :: MemoryOrder
   INTEGER          ,INTENT(IN)    :: Start1,End1,Start2,End2,Start3,End3
@@ -588,6 +591,9 @@ SUBROUTINE Transpose1D_grib(MemoryOrder, di, FieldType, Field, &
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
 
   CHARACTER (LEN=*),INTENT(IN)    :: MemoryOrder
   INTEGER          ,INTENT(IN)    :: Start1,End1,Start2,End2,Start3,End3

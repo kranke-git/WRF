@@ -167,6 +167,7 @@ subroutine ext_gr1_ioinit(SysDepInfo,Status)
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -239,6 +240,15 @@ subroutine ext_gr1_ioinit(SysDepInfo,Status)
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -251,6 +261,9 @@ subroutine ext_gr1_ioinit(SysDepInfo,Status)
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
   CHARACTER*(*), INTENT(IN) :: SysDepInfo
   integer ,intent(out) :: Status
   integer :: i
@@ -353,6 +366,7 @@ subroutine ext_gr1_ioexit(Status)
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -425,6 +439,15 @@ subroutine ext_gr1_ioexit(Status)
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   integer istat
   integer ,intent(out) :: Status
 
@@ -513,6 +536,7 @@ SUBROUTINE ext_gr1_open_for_read_begin ( FileName , Comm_compute, Comm_io, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -585,6 +609,15 @@ SUBROUTINE ext_gr1_open_for_read_begin ( FileName , Comm_compute, Comm_io, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -597,6 +630,9 @@ SUBROUTINE ext_gr1_open_for_read_begin ( FileName , Comm_compute, Comm_io, &
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
   CHARACTER*(*) :: FileName
   INTEGER ,       INTENT(IN)  :: Comm_compute , Comm_io
   CHARACTER*(*) :: SysDepInfo
@@ -806,6 +842,7 @@ SUBROUTINE ext_gr1_open_for_read_commit( DataHandle , Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -878,6 +915,15 @@ SUBROUTINE ext_gr1_open_for_read_commit( DataHandle , Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -890,6 +936,9 @@ SUBROUTINE ext_gr1_open_for_read_commit( DataHandle , Status )
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
   character(len=1000) :: msg
   INTEGER ,       INTENT(IN ) :: DataHandle
   INTEGER ,       INTENT(OUT) :: Status
@@ -979,6 +1028,7 @@ SUBROUTINE ext_gr1_open_for_read ( FileName , Comm_compute, Comm_io, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -1051,6 +1101,15 @@ SUBROUTINE ext_gr1_open_for_read ( FileName , Comm_compute, Comm_io, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -1063,6 +1122,9 @@ SUBROUTINE ext_gr1_open_for_read ( FileName , Comm_compute, Comm_io, &
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
   CHARACTER*(*) :: FileName
   INTEGER ,       INTENT(IN)  :: Comm_compute , Comm_io
   CHARACTER*(*) :: SysDepInfo
@@ -1152,6 +1214,7 @@ SUBROUTINE ext_gr1_open_for_write_begin(FileName, Comm, IOComm, SysDepInfo, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -1224,6 +1287,15 @@ SUBROUTINE ext_gr1_open_for_write_begin(FileName, Comm, IOComm, SysDepInfo, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -1236,6 +1308,9 @@ SUBROUTINE ext_gr1_open_for_write_begin(FileName, Comm, IOComm, SysDepInfo, &
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
 
   character*(*)        ,intent(in)  :: FileName
   integer              ,intent(in)  :: Comm
@@ -1351,6 +1426,7 @@ SUBROUTINE ext_gr1_open_for_write_commit( DataHandle , Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -1423,6 +1499,15 @@ SUBROUTINE ext_gr1_open_for_write_commit( DataHandle , Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -1435,6 +1520,9 @@ SUBROUTINE ext_gr1_open_for_write_commit( DataHandle , Status )
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
   INTEGER ,       INTENT(IN ) :: DataHandle
   INTEGER ,       INTENT(OUT) :: Status
 
@@ -1518,6 +1606,7 @@ subroutine ext_gr1_inquiry (Inquiry, Result, Status)
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -1590,6 +1679,15 @@ subroutine ext_gr1_inquiry (Inquiry, Result, Status)
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   character *(*), INTENT(IN)    :: Inquiry
   character *(*), INTENT(OUT)   :: Result
   integer        ,INTENT(INOUT) :: Status
@@ -1680,6 +1778,7 @@ SUBROUTINE ext_gr1_inquire_opened ( DataHandle, FileName , FileStat, Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -1752,6 +1851,15 @@ SUBROUTINE ext_gr1_inquire_opened ( DataHandle, FileName , FileStat, Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -1764,6 +1872,9 @@ SUBROUTINE ext_gr1_inquire_opened ( DataHandle, FileName , FileStat, Status )
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: FileName
   INTEGER ,       INTENT(OUT) :: FileStat
@@ -1851,6 +1962,7 @@ SUBROUTINE ext_gr1_ioclose ( DataHandle, Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -1923,6 +2035,15 @@ SUBROUTINE ext_gr1_ioclose ( DataHandle, Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER DataHandle, Status
   INTEGER istat
   INTEGER ierr
@@ -2036,6 +2157,7 @@ SUBROUTINE ext_gr1_write_field( DataHandle , DateStrIn , VarName , &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -2108,6 +2230,15 @@ SUBROUTINE ext_gr1_write_field( DataHandle , DateStrIn , VarName , &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -2120,6 +2251,9 @@ SUBROUTINE ext_gr1_write_field( DataHandle , DateStrIn , VarName , &
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
 
   INTEGER ,       INTENT(IN)    :: DataHandle 
   CHARACTER*(*) :: DateStrIn
@@ -2683,6 +2817,7 @@ SUBROUTINE ext_gr1_read_field ( DataHandle , DateStr , VarName , Field , &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -2755,6 +2890,15 @@ SUBROUTINE ext_gr1_read_field ( DataHandle , DateStr , VarName , Field , &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -2767,6 +2911,9 @@ SUBROUTINE ext_gr1_read_field ( DataHandle , DateStr , VarName , Field , &
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
   INTEGER ,       INTENT(IN)    :: DataHandle 
   CHARACTER*(*) :: DateStr
   CHARACTER*(*) :: VarName
@@ -2978,6 +3125,7 @@ SUBROUTINE ext_gr1_get_next_var ( DataHandle, VarName, Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -3050,6 +3198,15 @@ SUBROUTINE ext_gr1_get_next_var ( DataHandle, VarName, Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: VarName
   INTEGER ,       INTENT(OUT) :: Status
@@ -3130,6 +3287,7 @@ subroutine ext_gr1_end_of_frame(DataHandle, Status)
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -3202,6 +3360,15 @@ subroutine ext_gr1_end_of_frame(DataHandle, Status)
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   integer               ,intent(in)     :: DataHandle
   integer               ,intent(out)    :: Status
 
@@ -3279,6 +3446,7 @@ SUBROUTINE ext_gr1_iosync ( DataHandle, Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -3351,6 +3519,15 @@ SUBROUTINE ext_gr1_iosync ( DataHandle, Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   INTEGER ,       INTENT(OUT) :: Status
 
@@ -3434,6 +3611,7 @@ SUBROUTINE ext_gr1_inquire_filename ( DataHandle, FileName , FileStat, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -3506,6 +3684,15 @@ SUBROUTINE ext_gr1_inquire_filename ( DataHandle, FileName , FileStat, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
       integer, parameter  :: WRF_FILE_NOT_OPENED                  = 100
       integer, parameter  :: WRF_FILE_OPENED_NOT_COMMITTED        = 101
       integer, parameter  :: WRF_FILE_OPENED_FOR_WRITE            = 102
@@ -3518,6 +3705,9 @@ SUBROUTINE ext_gr1_inquire_filename ( DataHandle, FileName , FileStat, &
       integer, parameter  :: WRF_COMPLEX                          = 108
       integer, parameter  :: WRF_DOUBLE_COMPLEX                   = 109
       integer, parameter  :: WRF_FILE_OPENED_FOR_UPDATE           = 110
+! This bit is for backwards compatibility with old variants of these flags 
+! that are still being used in io_grib1 and io_phdf5.  It should be removed!  
+      integer, parameter  :: WRF_FILE_OPENED_AND_COMMITTED        = 102
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: FileName
   INTEGER ,       INTENT(OUT) :: FileStat
@@ -3608,6 +3798,7 @@ SUBROUTINE ext_gr1_get_var_info ( DataHandle , VarName , NDim , &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -3680,6 +3871,15 @@ SUBROUTINE ext_gr1_get_var_info ( DataHandle , VarName , NDim , &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   integer               ,intent(in)     :: DataHandle
   character*(*)         ,intent(in)     :: VarName
   integer               ,intent(out)    :: NDim
@@ -3763,6 +3963,7 @@ SUBROUTINE ext_gr1_set_time ( DataHandle, DateStr, Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -3835,6 +4036,15 @@ SUBROUTINE ext_gr1_set_time ( DataHandle, DateStr, Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: DateStr
   INTEGER ,       INTENT(OUT) :: Status
@@ -3926,6 +4136,7 @@ SUBROUTINE ext_gr1_get_next_time ( DataHandle, DateStr, Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -3998,6 +4209,15 @@ SUBROUTINE ext_gr1_get_next_time ( DataHandle, DateStr, Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(OUT) :: DateStr
   INTEGER ,       INTENT(OUT) :: Status
@@ -4082,6 +4302,7 @@ SUBROUTINE ext_gr1_get_previous_time ( DataHandle, DateStr, Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -4154,6 +4375,15 @@ SUBROUTINE ext_gr1_get_previous_time ( DataHandle, DateStr, Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: DateStr
   INTEGER ,       INTENT(OUT) :: Status
@@ -4241,6 +4471,7 @@ SUBROUTINE ext_gr1_get_var_ti_real ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -4313,6 +4544,15 @@ SUBROUTINE ext_gr1_get_var_ti_real ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)    :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -4415,6 +4655,7 @@ SUBROUTINE ext_gr1_get_var_ti_real8 ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -4487,6 +4728,15 @@ SUBROUTINE ext_gr1_get_var_ti_real8 ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)      :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -4588,6 +4838,7 @@ SUBROUTINE ext_gr1_get_var_ti_double ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -4660,6 +4911,15 @@ SUBROUTINE ext_gr1_get_var_ti_double ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(IN)  :: Element
   CHARACTER*(*) , INTENT(IN)  :: VarName
@@ -4763,6 +5023,7 @@ SUBROUTINE ext_gr1_get_var_ti_integer ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -4835,6 +5096,15 @@ SUBROUTINE ext_gr1_get_var_ti_integer ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)       :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -4937,6 +5207,7 @@ SUBROUTINE ext_gr1_get_var_ti_logical ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -5009,6 +5280,15 @@ SUBROUTINE ext_gr1_get_var_ti_logical ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)       :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -5111,6 +5391,7 @@ SUBROUTINE ext_gr1_get_var_ti_char ( DataHandle,Element,  Varname, Data,  &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -5183,6 +5464,15 @@ SUBROUTINE ext_gr1_get_var_ti_char ( DataHandle,Element,  Varname, Data,  &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -5280,6 +5570,7 @@ SUBROUTINE ext_gr1_put_var_ti_real ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -5352,6 +5643,15 @@ SUBROUTINE ext_gr1_put_var_ti_real ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -5443,6 +5743,7 @@ SUBROUTINE ext_gr1_put_var_ti_double ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -5515,6 +5816,15 @@ SUBROUTINE ext_gr1_put_var_ti_double ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(IN)  :: Element
   CHARACTER*(*) , INTENT(IN)  :: VarName
@@ -5606,6 +5916,7 @@ SUBROUTINE ext_gr1_put_var_ti_real8 ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -5678,6 +5989,15 @@ SUBROUTINE ext_gr1_put_var_ti_real8 ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -5769,6 +6089,7 @@ SUBROUTINE ext_gr1_put_var_ti_integer ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -5841,6 +6162,15 @@ SUBROUTINE ext_gr1_put_var_ti_integer ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -5932,6 +6262,7 @@ SUBROUTINE ext_gr1_put_var_ti_logical ( DataHandle,Element,  Varname, Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -6004,6 +6335,15 @@ SUBROUTINE ext_gr1_put_var_ti_logical ( DataHandle,Element,  Varname, Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: VarName 
@@ -6096,6 +6436,7 @@ SUBROUTINE ext_gr1_put_var_ti_char ( DataHandle,Element,  Varname, Data,  &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -6168,6 +6509,15 @@ SUBROUTINE ext_gr1_put_var_ti_char ( DataHandle,Element,  Varname, Data,  &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER(len=*) :: Element
   CHARACTER(len=*) :: VarName 
@@ -6264,6 +6614,7 @@ SUBROUTINE ext_gr1_get_var_td_double ( DataHandle,Element,  DateStr, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -6336,6 +6687,15 @@ SUBROUTINE ext_gr1_get_var_td_double ( DataHandle,Element,  DateStr, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(IN)  :: Element
   CHARACTER*(*) , INTENT(IN)  :: DateStr
@@ -6439,6 +6799,7 @@ SUBROUTINE ext_gr1_get_var_td_real ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -6511,6 +6872,15 @@ SUBROUTINE ext_gr1_get_var_td_real ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -6614,6 +6984,7 @@ SUBROUTINE ext_gr1_get_var_td_real8 ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -6686,6 +7057,15 @@ SUBROUTINE ext_gr1_get_var_td_real8 ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -6789,6 +7169,7 @@ SUBROUTINE ext_gr1_get_var_td_integer ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -6861,6 +7242,15 @@ SUBROUTINE ext_gr1_get_var_td_integer ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -6964,6 +7354,7 @@ SUBROUTINE ext_gr1_get_var_td_logical ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -7036,6 +7427,15 @@ SUBROUTINE ext_gr1_get_var_td_logical ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -7139,6 +7539,7 @@ SUBROUTINE ext_gr1_get_var_td_char ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -7211,6 +7612,15 @@ SUBROUTINE ext_gr1_get_var_td_char ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -7307,6 +7717,7 @@ SUBROUTINE ext_gr1_put_var_td_double ( DataHandle, Element, DateStr, Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -7379,6 +7790,15 @@ SUBROUTINE ext_gr1_put_var_td_double ( DataHandle, Element, DateStr, Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(IN)  :: Element
   CHARACTER*(*) , INTENT(IN)  :: DateStr
@@ -7474,6 +7894,7 @@ SUBROUTINE ext_gr1_put_var_td_integer ( DataHandle,Element,  DateStr, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -7546,6 +7967,15 @@ SUBROUTINE ext_gr1_put_var_td_integer ( DataHandle,Element,  DateStr, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -7640,6 +8070,7 @@ SUBROUTINE ext_gr1_put_var_td_real ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -7712,6 +8143,15 @@ SUBROUTINE ext_gr1_put_var_td_real ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -7806,6 +8246,7 @@ SUBROUTINE ext_gr1_put_var_td_real8 ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -7878,6 +8319,15 @@ SUBROUTINE ext_gr1_put_var_td_real8 ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -7970,6 +8420,7 @@ SUBROUTINE ext_gr1_put_var_td_logical ( DataHandle,Element,  DateStr, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -8042,6 +8493,15 @@ SUBROUTINE ext_gr1_put_var_td_logical ( DataHandle,Element,  DateStr, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -8136,6 +8596,7 @@ SUBROUTINE ext_gr1_put_var_td_char ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -8208,6 +8669,15 @@ SUBROUTINE ext_gr1_put_var_td_char ( DataHandle,Element,  DateStr,Varname, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -8312,6 +8782,7 @@ SUBROUTINE ext_gr1_get_dom_ti_real ( DataHandle,Element,   Data, Count, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -8384,6 +8855,15 @@ SUBROUTINE ext_gr1_get_dom_ti_real ( DataHandle,Element,   Data, Count, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   real ,          INTENT(OUT) :: Data(*)
@@ -8485,6 +8965,7 @@ SUBROUTINE ext_gr1_get_dom_ti_real8 ( DataHandle,Element,   Data, Count, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -8557,6 +9038,15 @@ SUBROUTINE ext_gr1_get_dom_ti_real8 ( DataHandle,Element,   Data, Count, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   real*8 ,        INTENT(OUT) :: Data(*)
@@ -8658,6 +9148,7 @@ SUBROUTINE ext_gr1_get_dom_ti_integer ( DataHandle,Element,   Data, Count, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -8730,6 +9221,15 @@ SUBROUTINE ext_gr1_get_dom_ti_integer ( DataHandle,Element,   Data, Count, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   integer ,       INTENT(OUT) :: Data(*)
@@ -8829,6 +9329,7 @@ SUBROUTINE ext_gr1_get_dom_ti_logical ( DataHandle,Element,   Data, Count, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -8901,6 +9402,15 @@ SUBROUTINE ext_gr1_get_dom_ti_logical ( DataHandle,Element,   Data, Count, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   logical ,       INTENT(OUT) :: Data(*)
@@ -9001,6 +9511,7 @@ SUBROUTINE ext_gr1_get_dom_ti_char ( DataHandle,Element,   Data,  Status )
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -9073,6 +9584,15 @@ SUBROUTINE ext_gr1_get_dom_ti_char ( DataHandle,Element,   Data,  Status )
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: Data
@@ -9162,6 +9682,7 @@ SUBROUTINE ext_gr1_get_dom_ti_double ( DataHandle,Element,   Data, Count, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -9234,6 +9755,15 @@ SUBROUTINE ext_gr1_get_dom_ti_double ( DataHandle,Element,   Data, Count, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(IN)  :: Element
   real*8 ,            INTENT(OUT) :: Data(*)
@@ -9342,6 +9872,7 @@ SUBROUTINE ext_gr1_put_dom_ti_real ( DataHandle,Element,   Data, Count,  &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -9414,6 +9945,15 @@ SUBROUTINE ext_gr1_put_dom_ti_real ( DataHandle,Element,   Data, Count,  &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   real ,          INTENT(IN)  :: Data(*)
@@ -9532,6 +10072,7 @@ SUBROUTINE ext_gr1_put_dom_ti_real8 ( DataHandle,Element,   Data, Count,  &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -9604,6 +10145,15 @@ SUBROUTINE ext_gr1_put_dom_ti_real8 ( DataHandle,Element,   Data, Count,  &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   real*8 ,        INTENT(IN)  :: Data(*)
@@ -9695,6 +10245,7 @@ SUBROUTINE ext_gr1_put_dom_ti_integer ( DataHandle,Element,   Data, Count,  &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -9767,6 +10318,15 @@ SUBROUTINE ext_gr1_put_dom_ti_integer ( DataHandle,Element,   Data, Count,  &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   INTEGER ,       INTENT(IN)  :: Data(*)
@@ -9874,6 +10434,7 @@ SUBROUTINE ext_gr1_put_dom_ti_logical ( DataHandle,Element,   Data, Count,  &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -9946,6 +10507,15 @@ SUBROUTINE ext_gr1_put_dom_ti_logical ( DataHandle,Element,   Data, Count,  &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   logical ,       INTENT(IN)  :: Data(*)
@@ -10037,6 +10607,7 @@ SUBROUTINE ext_gr1_put_dom_ti_char ( DataHandle,Element,   Data,  &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -10109,6 +10680,15 @@ SUBROUTINE ext_gr1_put_dom_ti_char ( DataHandle,Element,   Data,  &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*),     INTENT(IN)  :: Data
@@ -10200,6 +10780,7 @@ SUBROUTINE ext_gr1_put_dom_ti_double ( DataHandle,Element, Data, Count, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -10272,6 +10853,15 @@ SUBROUTINE ext_gr1_put_dom_ti_double ( DataHandle,Element, Data, Count, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(IN)  :: Element
   real*8 ,            INTENT(IN) :: Data(*)
@@ -10370,6 +10960,7 @@ SUBROUTINE ext_gr1_get_dom_td_real ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -10442,6 +11033,15 @@ SUBROUTINE ext_gr1_get_dom_td_real ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -10544,6 +11144,7 @@ SUBROUTINE ext_gr1_get_dom_td_real8 ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -10616,6 +11217,15 @@ SUBROUTINE ext_gr1_get_dom_td_real8 ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -10718,6 +11328,7 @@ SUBROUTINE ext_gr1_get_dom_td_integer ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -10790,6 +11401,15 @@ SUBROUTINE ext_gr1_get_dom_td_integer ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -10892,6 +11512,7 @@ SUBROUTINE ext_gr1_get_dom_td_logical ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -10964,6 +11585,15 @@ SUBROUTINE ext_gr1_get_dom_td_logical ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -11066,6 +11696,7 @@ SUBROUTINE ext_gr1_get_dom_td_char ( DataHandle,Element, DateStr,  Data,  &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -11138,6 +11769,15 @@ SUBROUTINE ext_gr1_get_dom_td_char ( DataHandle,Element, DateStr,  Data,  &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -11227,6 +11867,7 @@ SUBROUTINE ext_gr1_get_dom_td_double ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -11299,6 +11940,15 @@ SUBROUTINE ext_gr1_get_dom_td_double ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(IN)  :: Element
   CHARACTER*(*) , INTENT(IN)  :: DateStr
@@ -11409,6 +12059,7 @@ SUBROUTINE ext_gr1_put_dom_td_real8 ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -11481,6 +12132,15 @@ SUBROUTINE ext_gr1_put_dom_td_real8 ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -11574,6 +12234,7 @@ SUBROUTINE ext_gr1_put_dom_td_integer ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -11646,6 +12307,15 @@ SUBROUTINE ext_gr1_put_dom_td_integer ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -11739,6 +12409,7 @@ SUBROUTINE ext_gr1_put_dom_td_logical ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -11811,6 +12482,15 @@ SUBROUTINE ext_gr1_put_dom_td_logical ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -11904,6 +12584,7 @@ SUBROUTINE ext_gr1_put_dom_td_char ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -11976,6 +12657,15 @@ SUBROUTINE ext_gr1_put_dom_td_char ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -12064,6 +12754,7 @@ SUBROUTINE ext_gr1_put_dom_td_double ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -12136,6 +12827,15 @@ SUBROUTINE ext_gr1_put_dom_td_double ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) , INTENT(IN)  :: Element
   CHARACTER*(*) , INTENT(IN)  :: DateStr
@@ -12229,6 +12929,7 @@ SUBROUTINE ext_gr1_put_dom_td_real ( DataHandle,Element, DateStr,  Data, &
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -12301,6 +13002,15 @@ SUBROUTINE ext_gr1_put_dom_td_real ( DataHandle,Element, DateStr,  Data, &
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
   INTEGER ,       INTENT(IN)  :: DataHandle
   CHARACTER*(*) :: Element
   CHARACTER*(*) :: DateStr
@@ -12398,6 +13108,7 @@ SUBROUTINE gr1_build_string (string, Element, Value, Count, Status)
   integer, parameter  :: WRF_WARN_LENGTH_LESS_THAN_1 = -1022    
   integer, parameter  :: WRF_WARN_MORE_DATA_IN_FILE  = -1023    
   integer, parameter  :: WRF_WARN_DATE_LT_LAST_DATE  = -1024
+  integer, parameter  :: WRF_WARN_ADIOS2  = -1025
 
 ! For HDF5 only
   integer, parameter  :: WRF_HDF5_ERR_FILE                 = -200
@@ -12470,6 +13181,15 @@ SUBROUTINE gr1_build_string (string, Element, Value, Count, Status)
   integer, parameter :: WRF_HDF5_ERR_OTHERS             = -320
   integer, parameter :: WRF_HDF5_ERR_ATTRIBUTE_OTHERS   = -321
 
+  integer, parameter :: WRF_GRIB2_ERR_GRIBCREATE        = -401
+  integer, parameter :: WRF_GRIB2_ERR_ADDLOCAL          = -402
+  integer, parameter :: WRF_GRIB2_ERR_ADDGRIB           = -403
+  integer, parameter :: WRF_GRIB2_ERR_ADDFIELD          = -404
+  integer, parameter :: WRF_GRIB2_ERR_GRIBEND           = -405
+  integer, parameter :: WRF_GRIB2_ERR_WRITE             = -406
+  integer, parameter :: WRF_GRIB2_ERR_GRIB2MAP          = -407
+  integer, parameter :: WRF_GRIB2_ERR_GETGB2            = -408
+  integer, parameter :: WRF_GRIB2_ERR_READ              = -409
 
   CHARACTER (LEN=*) , INTENT(INOUT) :: string
   CHARACTER (LEN=*) , INTENT(IN)    :: Element
