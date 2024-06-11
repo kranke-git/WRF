@@ -220,7 +220,6 @@
                           ustm=ustm_hv,ck=ck_hv,cka=cka_hv,cd=cd_hv,cda=cda_hv                     &
 #endif
                          )
-
     do i = its,ite
        !output arguments:
        lh(i,j)  = lh_hv(i)

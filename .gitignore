@@ -15,7 +15,7 @@
 *.mod
 *.a
 configure.wrf*
-*.backup
+*.backup*
 *.f90
 log*
 run/namelist.input.backup*

@@ -414,7 +414,9 @@ CONTAINS
                 ,NUM_TILES=grid%num_tiles                                              & ! Number of Tiles
                 ,CURR_SECS2=curr_secs2,HISTORY_INTERVAL=grid%history_interval          & ! Time Parameters
                 ,C1H=grid%c1h,C2H=grid%c2h,MUUS=grid%muus,MUVS=grid%muvs               & ! Decoupling parameters
-                ,MSFU=grid%msfuy,MSFV=grid%msfvx,DT=grid%dt                            & ! Decoupling parameters
+                ,MUTS=grid%muts                                                        & ! Decoupling parameters
+                ,MSFUY=grid%msfuy,MSFVX=grid%msfvx,MSFT=grid%msft                        & ! Decoupling parameters
+                ,DT=grid%dt                                                            & ! Time step
                 ! kranke time-step tendencies
                 ,ru_tend=grid%ru_tend,ru_tend_adv=grid%ru_tend_adv                     &
                 ,ru_tend_pgf=grid%ru_tend_pgf,ru_tend_cor=grid%ru_tend_cor             &
@@ -426,6 +428,10 @@ CONTAINS
                 ,rv_tend_curv=grid%rv_tend_curv,rv_tend_hdiff=grid%rv_tend_hdiff       &
                 ,rv_tend_phys=grid%rv_tend_phys,rv_tend_damp=grid%rv_tend_damp         &
                 ,rv_tend_vdiff=grid%rv_tend_vdiff,rv_tend_6diff=grid%rv_tend_6diff     &
+                ,t_tend_adv=grid%t_tend_adv                                            &
+                ,t_tend_hdiff=grid%t_tend_hdiff, t_tend_phys=grid%t_tend_phys          &
+                ,t_tend_damp=grid%t_tend_damp, t_tend_vdiff=grid%t_tend_vdiff          &
+                ,t_tend_6diff=grid%t_tend_6diff                                        &
                 ! kranke accumulated tendencies
                 ,aru_tend=grid%aru_tend,aru_tend_adv=grid%aru_tend_adv                 &
                 ,aru_tend_pgf=grid%aru_tend_pgf,aru_tend_cor=grid%aru_tend_cor         &
@@ -436,11 +442,16 @@ CONTAINS
                 ,arv_tend_pgf=grid%arv_tend_pgf,arv_tend_cor=grid%arv_tend_cor         &
                 ,arv_tend_curv=grid%arv_tend_curv,arv_tend_hdiff=grid%arv_tend_hdiff   &
                 ,arv_tend_phys=grid%arv_tend_phys,arv_tend_damp=grid%arv_tend_damp     &
-                ,arv_tend_vdiff=grid%arv_tend_vdiff,arv_tend_6diff=grid%arv_tend_6diff & 
+                ,arv_tend_vdiff=grid%arv_tend_vdiff,arv_tend_6diff=grid%arv_tend_6diff &
+                ,at_tend_adv=grid%at_tend_adv                                          &
+                ,at_tend_hdiff=grid%at_tend_hdiff, at_tend_phys=grid%at_tend_phys      &
+                ,at_tend_damp=grid%at_tend_damp, at_tend_vdiff=grid%at_tend_vdiff      &
+                ,at_tend_6diff=grid%at_tend_6diff                                      &
+	        ! Acoustic part	
                 ,aru_tend_acst=grid%aru_tend_acst,arv_tend_acst=grid%arv_tend_acst     &
                 ,ru_tend_acst=grid%ru_tend_acst,rv_tend_acst=grid%rv_tend_acst         &
-                ,u_1=grid%u_1, u_2=grid%u_2,RQVFTEN=grid%RQVFTEN                       &
-                ,arq_tend_adv=grid%arq_tend_adv                                        ) 
+                ,t_tend_acst=grid%t_tend_acst,at_tend_acst=grid%at_tend_acst           &
+                ,RQVFTEN=grid%RQVFTEN, arq_tend_adv=grid%arq_tend_adv                  ) 
 
 
       NWPDIAGS: IF ( config_flags%nwp_diagnostics == 1 ) THEN

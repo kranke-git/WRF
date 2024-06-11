@@ -17,6 +17,7 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
                             t_1, t_2, ph_1, ph_2,         &
                             ru_tend_acst, rv_tend_acst,   & !kranke
                             ru_tend_r, rv_tend_r,         & !kranke
+			    t_tend_acst,                  & !kranke
                             mub, mu_1, mu_2,              &
                             muu, muus, muv, muvs,         &
                             mut, muts, mudf,              &
@@ -53,7 +54,8 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
                                                               ru_tend_acst, &
                                                               ru_tend_r,    &
                                                               rv_tend_acst, &
-                                                              rv_tend_r
+                                                              rv_tend_r,    &
+		                                              t_tend_acst					      
 
 
   REAL, DIMENSION(ims:ime, kms:kme, jms:jme),INTENT(  OUT) :: u_save,   &
@@ -303,7 +305,7 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
       DO k=k_start, k_end
       DO i=i_start, i_endu
         ru_tend_acst(i,k,j) = 0.0
-        ru_tend_r(i,k,j)    = 0.0
+!        ru_tend_r(i,k,j)    = 0.0
       ENDDO
       ENDDO
       ENDDO
@@ -313,10 +315,20 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
       DO k=k_start, k_end
       DO i=i_start, i_end
         rv_tend_acst(i,k,j) = 0.0
-        rv_tend_r(i,k,j)    = 0.0
+!        rv_tend_r(i,k,j)    = 0.0
       ENDDO
       ENDDO
       ENDDO
+
+      ! theta variables
+      DO j=j_start, j_end
+      DO k=k_start, k_end
+      DO i=i_start, i_end
+        t_tend_acst(i,k,j) = 0.0
+      ENDDO
+      ENDDO
+      ENDDO
+
 
     END IF
     
@@ -853,7 +865,7 @@ SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
    DO k = k_start, k_end
    DO i = i_start_u_tend, i_end_u_tend
      u(i,k,j) = u(i,k,j) + dts*ru_tend(i,k,j)
-     ru_tend_r(i,k,j) = ru_tend_r(i,k,j) + dts*ru_tend(i,k,j)
+!     ru_tend_r(i,k,j) = ru_tend_r(i,k,j) + dts*ru_tend(i,k,j)
    ENDDO
    ENDDO
    DO i = i_start_up, i_end_up
@@ -1037,7 +1049,9 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
                          step, config_flags,                  &
                          ids, ide, jds, jde, kds, kde,        &
                          ims, ime, jms, jme, kms, kme,        &
-                         its, ite, jts, jte, kts, kte        )
+                         its, ite, jts, jte, kts, kte,        &
+	                 t_tend_acst                          )
+
   IMPLICIT NONE  ! religion first
 ! stuff coming in
   TYPE(grid_config_rec_type), INTENT(IN   ) :: config_flags
@@ -1061,7 +1075,8 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
                                               t_ave,  &
                                               uam,    &
                                               vam,    &
-                                              wwam
+                                              wwam,   &
+					      t_tend_acst
                                               
   REAL, DIMENSION( ims:ime , jms:jme ),    INTENT(IN   ) :: muu,  &
                                                             muv,  &
@@ -1093,7 +1108,7 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
   REAL, DIMENSION (its:ite) :: dmdt
   INTEGER :: i, j, k, kk, i_start, i_end, j_start, j_end, k_start, k_end
   INTEGER :: i_endu, j_endv
-  REAL    :: acc
+  REAL    :: acc, t_old
 !<DESCRIPTION>
 !
 !  advance_mu_t advances the explicit perturbation theta equation and the mass
@@ -1217,6 +1232,7 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
      DO k=1,k_end
      DO i=i_start, i_end
        ! multiplication by msfty uncouples result for Theta
+       t_old    = t(i,k,j)
        t(i,k,j) = t(i,k,j) - dts*msfty(i,j)*(              &
                           ! multiplication by mx needed for RHS terms 1 & 2
                           msftx(i,j)*(                     &
@@ -1227,6 +1243,7 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
               ( u(i+1,k,j)*(t_1(i+1,k,j)+t_1(i  ,k,j))     &
                -u(i  ,k,j)*(t_1(i  ,k,j)+t_1(i-1,k,j)) ) ) &
              + rdnw(k)*( wdtn(i,k+1)-wdtn(i,k) ) )       
+     t_tend_acst(i,k,j)=t(i,k,j)-t_old
      ENDDO
      ENDDO
    ENDDO

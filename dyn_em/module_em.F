@@ -197,6 +197,8 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                          rv_tend_pgf, rv_tend_curv,                       & ! kranke
                          rv_tend_hdiff, rv_tend_vdiff,                    & ! kranke
                          rv_tend_damp, rv_tend_6diff,                     & ! kranke
+                         t_tend_adv,  t_tend_hdiff, t_tend_vdiff,         & ! kranke
+                         t_tend_damp, t_tend_6diff,                       & ! kranke
                          ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf, &
                          mu_tend, u_save, v_save, w_save, ph_save,        &
                          t_save, mu_save, RTHFTEN,                        &
@@ -286,6 +288,11 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                                                          rv_tend_vdiff, & !kranke
                                                          rv_tend_damp,  & !kranke
                                                          rv_tend_6diff, & !kranke
+                                                         t_tend_adv,    & !kranke
+                                                         t_tend_hdiff,  & !kranke
+                                                         t_tend_vdiff,  & !kranke
+                                                         t_tend_damp,   & !kranke
+                                                         t_tend_6diff,  & !kranke
                                                          t_tend,  &
                                                          ph_tend, &
                                                          RTHFTEN, &
@@ -371,7 +378,9 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
    REAL , DIMENSION( ims:ime , jms:jme )         :: muv_old, muv_new                                                              
    LOGICAL                                       :: ieva
 
-   REAL , DIMENSION( ims:ime , kms:kme, jms:jme  ) :: ru_tend_old, rv_tend_old !kranke
+   REAL , DIMENSION( ims:ime , kms:kme, jms:jme  ) :: ru_tend_old, &  
+                                                      rv_tend_old, & !kranke
+                                                      t_tend_old     !kranke
    
 !<DESCRIPTION>
 !
@@ -644,6 +653,7 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
      
 ! also use weno for monotonic scalar option so that the h_ and z_tendency arrays are not needed
 
+     t_tend_old = t_tend                            ! kranke
      CALL advect_scalar_weno ( t, t, t_tend, ru, rv, wwE,     &
                                c1h, c2h, mut, time_step,      &
                                config_flags,                  &
@@ -653,8 +663,11 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                                ids, ide, jds, jde, kds, kde,  &
                                ims, ime, jms, jme, kms, kme,  &
                                its, ite, jts, jte, kts, kte  )
+     t_tend_adv = t_tend - t_tend_old              ! kranke
+
    ELSE
 
+     t_tend_old = t_tend                            ! kranke
      CALL advect_scalar ( t, t, t_tend, ru, rv, wwE,    &
                           c1h, c2h,                     &
                           mut, time_step, config_flags, &
@@ -664,11 +677,14 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                           ids, ide, jds, jde, kds, kde, &
                           ims, ime, jms, jme, kms, kme, &
                           its, ite, jts, jte, kts, kte )
+     t_tend_adv = t_tend - t_tend_old              ! kranke
+
 
    ENDIF
 
    IF( ieva ) THEN
       
+     t_tend_old = t_tend                            ! kranke
      CALL advect_s_implicit ( t, t_old, t_tend, ru, rv, wwI,  &
                               c1h, c2h,                       &
                               mut_old, mut, mut_new,          &
@@ -681,6 +697,7 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                               ids, ide, jds, jde, kds, kde,   &
                               ims, ime, jms, jme, kms, kme,   &
                               its, ite, jts, jte, kts, kte )
+     t_tend_adv = t_tend - t_tend_old              ! kranke
 
    ENDIF
      
@@ -881,6 +898,7 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                                         its, ite, jts, jte, kts, kte   )
 
         khdq = 3.*khdif
+        t_tend_old = t_tendf                         ! kranke
         CALL horizontal_diffusion_3dmp ( 'm', t, t_tendf, mut,            &
                                          c1h, c2h,                        &
                                          config_flags, t_init,            &
@@ -890,6 +908,7 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                                          ids, ide, jds, jde, kds, kde,    &
                                          ims, ime, jms, jme, kms, kme,    &
                                          its, ite, jts, jte, kts, kte    )
+        t_tend_hdiff = t_tendf - t_tend_old         ! kranke
 
         pbl_test : IF (config_flags%bl_pbl_physics .eq. 0) THEN
 
@@ -920,12 +939,14 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                                     its, ite, jts, jte, kts, kte        )
 
           kvdq = 3.*kvdif
+          t_tend_old = t_tendf                         ! kranke
           CALL vertical_diffusion_3dmp ( t, t_tendf, config_flags, t_init,     &
                                          c1h, c2h,                             &
                                          alt, mut, rdn, rdnw, kvdq ,           &
                                          ids, ide, jds, jde, kds, kde,         &
                                          ims, ime, jms, jme, kms, kme,         &
                                          its, ite, jts, jte, kts, kte         )
+          t_tend_vdiff = t_tendf - t_tend_old         ! kranke
 
         ENDIF pbl_test
 
@@ -976,6 +997,7 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                                        ims, ime, jms, jme, kms, kme,  &
                                        its, ite, jts, jte, kts, kte )
 
+      t_tend_old = t_tendf                         ! kranke
       CALL sixth_order_diffusion( 'm', t,  t_tendf, mut, dt,          &
                                        config_flags, c1h, c2h,        &
                                        diff_6th_opt, diff_6th_factor, &
@@ -987,12 +1009,14 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                                        ids, ide, jds, jde, kds, kde,  &
                                        ims, ime, jms, jme, kms, kme,  &
                                        its, ite, jts, jte, kts, kte )
+      t_tend_6diff = t_tendf - t_tend_old         ! kranke
 
     ENDIF
 
     IF( damp_opt .eq. 2 ) THEN                                      
        ru_tend_old = ru_tendf                         ! kranke
        rv_tend_old = rv_tendf                         ! kranke
+       t_tend_old  = t_tendf                         ! kranke
        CALL rk_rayleigh_damp( ru_tendf, rv_tendf,              &
                               rw_tendf, t_tendf,               &
                               u, v, w, t, t_init,              &
@@ -1005,6 +1029,7 @@ SUBROUTINE rk_tendency ( config_flags, rk_step,                           &
                               its, ite, jts, jte, kts, kte   )
       ru_tend_damp = ru_tendf - ru_tend_old         ! kranke
       rv_tend_damp = rv_tendf - rv_tend_old         ! kranke
+      t_tend_damp  = t_tendf  - t_tend_old         ! kranke
     ENDIF
 
     IF( rad_nudge .eq. 1 )                                     &

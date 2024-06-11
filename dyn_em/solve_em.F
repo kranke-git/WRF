@@ -854,6 +854,10 @@ BENCH_START(calc_p_rho_tim)
                              , grid%rv_tend_damp                & !kranke
                              , grid%rv_tend_vdiff               & !kranke
                              , grid%rv_tend_hdiff               & !kranke
+                             , grid%t_tend_phys                 & !kranke
+                             , grid%t_tend_damp                 & !kranke
+                             , grid%t_tend_vdiff                & !kranke
+                             , grid%t_tend_hdiff                & !kranke
                              , rw_tendf, t_tendf                &
                              , ph_tendf, mu_tendf               &
                              , tke_tend                         &
@@ -889,6 +893,8 @@ BENCH_START(rk_tend_tim)
                          ,grid%ru_tend_hdiff, grid%ru_tend_vdiff, grid%ru_tend_damp, grid%ru_tend_6diff        & ! kranke
                          ,grid%rv_tend_cor, grid%rv_tend_adv, grid%rv_tend_pgf, grid%rv_tend_curv              & ! kranke
                          ,grid%rv_tend_hdiff, grid%rv_tend_vdiff, grid%rv_tend_damp, grid%rv_tend_6diff        & ! kranke
+                         ,grid%t_tend_adv, grid%t_tend_hdiff, grid%t_tend_vdiff, grid%t_tend_damp              & ! kranke
+                         ,grid%t_tend_6diff                                                                    & ! kranke
                          ,ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf                                      &
                          ,mu_tend, grid%u_save, grid%v_save, w_save, ph_save                                   &
                          ,grid%t_save, mu_save, grid%rthften                                                   &
@@ -1102,6 +1108,7 @@ BENCH_START(small_step_prep_tim)
                              grid%t_1,grid%t_2,grid%ph_1,grid%ph_2,                   &
                              grid%ru_tend_acst, grid%rv_tend_acst,                    & ! kranke
                              grid%ru_tend_r, grid%rv_tend_r,                          & ! kranke
+                             grid%t_tend_acst,                                        & ! kranke
                              grid%mub, grid%mu_1, grid%mu_2,                          &
                              grid%muu, grid%muus, grid%muv, grid%muvs,                &
                              grid%mut, grid%muts, grid%mudf,                          &
@@ -1428,7 +1435,7 @@ BENCH_START(advance_mu_t_tim)
                           ims, ime, jms, jme, kms, kme,      &
                           grid%i_start(ij), grid%i_end(ij),  &
                           grid%j_start(ij), grid%j_end(ij),  &
-                          k_start    , k_end                )
+                          k_start    , k_end, grid%t_tend_acst    ) !kranke
 BENCH_END(advance_mu_t_tim)
        ENDDO
        !$OMP END PARALLEL DO

@@ -18,6 +18,8 @@ CONTAINS
                              , ru_tend_vdiff, ru_tend_hdiff     & ! kranke
                              , rv_tend_phys, rv_tend_damp       & ! kranke 
                              , rv_tend_vdiff, rv_tend_hdiff     & ! kranke
+                             , t_tend_phys, t_tend_damp         & ! kranke
+                             , t_tend_vdiff, t_tend_hdiff       & ! kranke
                              , rw_tendf, t_tendf                &
                              , ph_tendf, mu_tendf               &
                              , tke_tend                         &
@@ -126,7 +128,11 @@ CONTAINS
                                                          rv_tend_hdiff, & !kranke
                                                          rv_tend_vdiff, & !kranke
                                                          rv_tend_damp,  & !kranke
-                                                         rv_tend_phys    !kranke
+                                                         rv_tend_phys,  & !kranke
+                                                         t_tend_hdiff,  & !kranke
+                                                         t_tend_vdiff,  & !kranke
+                                                         t_tend_damp,   & !kranke
+                                                         t_tend_phys      !kranke
 
     REAL    ,DIMENSION(ims:ime,jms:jme), INTENT(INOUT) :: mu_tendf
 
@@ -142,7 +148,9 @@ CONTAINS
   :: nba_rij
 
 ! Local
-    REAL , DIMENSION( ims:ime , kms:kme, jms:jme  ) :: ru_tend_old, rv_tend_old ! kranke
+    REAL , DIMENSION( ims:ime , kms:kme, jms:jme  ) :: ru_tend_old, & 
+                                                       rv_tend_old, &
+                                                       t_tend_old     ! kranke
     REAL, DIMENSION( ims:ime, jms:jme ) :: ht_loc
     REAL :: scale_factor
     INTEGER, DIMENSION( ims:ime, jms:jme ) :: shadowmask 
@@ -806,6 +814,7 @@ BENCH_START(update_phy_ten_tim)
 #endif
          ru_tend_old = ru_tendf                           ! kranke
          rv_tend_old = rv_tendf                           ! kranke
+         t_tend_old  = t_tendf                            ! kranke
          CALL update_phy_ten(ph_tendf,t_tendf, ru_tendf, rv_tendf,moist_tend ,&
                            scalar_tend, mu_tendf,                           &
                            grid%rthraten,grid%rthblten,grid%rthcuten,grid%rthshten, &
@@ -818,7 +827,7 @@ BENCH_START(update_phy_ten_tim)
                            grid%rqcncuten,grid%rqincuten,                   & !BSINGH - Added two CU tends
                            grid%rqvshten,grid%rqcshten,grid%rqrshten,       &
                            grid%rqishten,grid%rqsshten,grid%rqgshten,       &
-                           grid%rqcnshten,grid%rqinshten,                   &!BSINGH - Added two SHCU tends
+                           grid%rqcnshten,grid%rqinshten,                   & !BSINGH - Added two SHCU tends
                            grid%RUNDGDTEN,                                  &
                            grid%RVNDGDTEN,grid%RTHNDGDTEN,grid%RPHNDGDTEN,  &
                            grid%RQVNDGDTEN,grid%RMUNDGDTEN,                 &
@@ -832,6 +841,7 @@ BENCH_START(update_phy_ten_tim)
                            k_start, k_end                               )
          ru_tend_phys = ru_tendf - ru_tend_old             ! kranke
          rv_tend_phys = rv_tendf - rv_tend_old             ! kranke
+         t_tend_phys  = t_tendf  - t_tend_old              ! kranke
        END DO
        !$OMP END PARALLEL DO
 BENCH_END(update_phy_ten_tim)
@@ -894,6 +904,7 @@ to see if perturbation of moist potential temperature is OK.
          DO ij = 1 , grid%num_tiles
            ru_tend_old = ru_tendf                           ! kranke
            rv_tend_old = rv_tendf                           ! kranke
+           t_tend_old  = t_tendf                            ! kranke
            CALL damptop( grid%u_2, grid%v_2, grid%t_2, &
                          grid%mut, grid%muu, grid%muv, &
                          pi_phy,                                &
@@ -905,6 +916,7 @@ to see if perturbation of moist potential temperature is OK.
                          k_start, k_end                         )
            ru_tend_damp = ru_tendf - ru_tend_old             ! kranke
            rv_tend_damp = rv_tendf - rv_tend_old             ! kranke
+           t_tend_damp  = t_tendf  - t_tend_old             ! kranke
          END DO
          !$OMP END PARALLEL DO
        END IF
@@ -1040,6 +1052,7 @@ BENCH_END(tke_rhs_tim)
               DO ij = 1 , grid%num_tiles
               ru_tend_old = ru_tendf                           ! kranke
               rv_tend_old = rv_tendf                           ! kranke
+              t_tend_old  = t_tendf                            ! kranke
               CALL vertical_diffusion_implicit(ru_tendf, rv_tendf, rw_tendf,                              &
                                                t_tendf, tke_tend,                                         &
                                                moist_tend, num_moist,                                     &
@@ -1063,6 +1076,7 @@ BENCH_END(tke_rhs_tim)
                                                k_start, k_end      )
               ru_tend_vdiff = ru_tendf - ru_tend_old             ! kranke
               rv_tend_vdiff = rv_tendf - rv_tend_old             ! kranke
+              t_tend_vdiff  = t_tendf  - t_tend_old              ! kranke
               ENDDO
               !$OMP END PARALLEL DO
 
@@ -1076,6 +1090,7 @@ BENCH_START(vert_diff_tim)
              CALL wrf_debug ( 200 , ' call vertical_diffusion_2 ' )
              ru_tend_old = ru_tendf                           ! kranke
              rv_tend_old = rv_tendf                           ! kranke
+             t_tend_old  = t_tendf                            ! kranke
              CALL vertical_diffusion_2( ru_tendf, rv_tendf, rw_tendf,            &
                                       t_tendf, tke_tend,                         &
                                       moist_tend, num_moist,                      &
@@ -1098,6 +1113,7 @@ BENCH_START(vert_diff_tim)
                                       k_start, k_end                             )
              ru_tend_vdiff = ru_tendf - ru_tend_old             ! kranke
              rv_tend_vdiff = rv_tendf - rv_tend_old             ! kranke
+             t_tend_vdiff  = t_tendf  - t_tend_old              ! kranke
            ENDDO
            !$OMP END PARALLEL DO
 BENCH_END(vert_diff_tim)
@@ -1113,6 +1129,7 @@ BENCH_START(hor_diff_tim)
            CALL wrf_debug ( 200 , ' call horizontal_diffusion_2' )
            ru_tend_old = ru_tendf                           ! kranke
            rv_tend_old = rv_tendf                           ! kranke
+           t_tend_old  = t_tendf                            ! kranke
            CALL horizontal_diffusion_2( t_tendf, ru_tendf, rv_tendf, rw_tendf, &
                                       tke_tend,                              &
                                       moist_tend, num_moist,                  &
@@ -1138,6 +1155,7 @@ BENCH_START(hor_diff_tim)
                                       k_start    , k_end                    )
            ru_tend_hdiff = ru_tendf - ru_tend_old             ! kranke
            rv_tend_hdiff = rv_tendf - rv_tend_old             ! kranke
+           t_tend_hdiff  = t_tendf  - t_tend_old              ! kranke
          ENDDO
          !$OMP END PARALLEL DO
 BENCH_END(hor_diff_tim)
