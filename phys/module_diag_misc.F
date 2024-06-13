@@ -1085,7 +1085,7 @@ CONTAINS
              at_tend_damp(i,k,j)  = at_tend_damp(i,k,j)  +  t_tend_damp(i,k,j)*dt/decfac
              at_tend_vdiff(i,k,j) = at_tend_vdiff(i,k,j) +  t_tend_vdiff(i,k,j)*dt/decfac
              at_tend_6diff(i,k,j) = at_tend_6diff(i,k,j) +  t_tend_6diff(i,k,j)*dt/decfac
-             at_tend_acst(i,k,j)  = at_tend_acst(i,k,j)  +  t_tend_acst(i,k,j)/decfac      ! Note: no dt
+             at_tend_acst(i,k,j)  = at_tend_acst(i,k,j)  +  t_tend_acst(i,k,j)/decfac       ! Note: no dt
            ENDDO
          ENDDO
        ENDDO

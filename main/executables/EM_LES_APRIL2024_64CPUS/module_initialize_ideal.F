@@ -1430,7 +1430,7 @@ CONTAINS
     DO I = its, min(ide-1,ite)
 !     call random_number (randx)
 !      randx = randx - 0.5
-       IF (MOD( I, 2 )) THEN
+       IF (MOD( I, 2 ) /= 0) THEN
          randx = 1
        ELSE
          randx = -1

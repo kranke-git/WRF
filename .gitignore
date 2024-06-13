@@ -60,7 +60,7 @@ tools/fseeko64_test
 tools/fseeko_test
 tools/gen_comms.c
 tools/registry
-
+foo*
 # Out-of-source build locations
 _build*
 wrf_config.cmake

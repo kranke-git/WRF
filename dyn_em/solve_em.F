@@ -978,7 +978,8 @@ BENCH_START(relax_bdy_dry_tim)
                               k_start, k_end                              )
 
        ENDIF
-
+        
+       WRITE(6,*) "Before rk_addtend_dry, ru_tend is", grid%ru_tend(5,1,5), "ru_tendf is", ru_tendf(5,1,5)
        CALL rk_addtend_dry( grid%ru_tend,  grid%rv_tend,  rw_tend,  ph_tend,  t_tend,  &
                             ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf, &
                             grid%u_save, grid%v_save, w_save, ph_save, grid%t_save, &
@@ -993,6 +994,7 @@ BENCH_START(relax_bdy_dry_tim)
                             grid%i_start(ij), grid%i_end(ij),                &
                             grid%j_start(ij), grid%j_end(ij),                &
                             k_start, k_end                                  )
+       WRITE(6,*) "After rk_addtend_dry, ru_tend is", grid%ru_tend(5,1,5), "ru_tendf is", ru_tendf(5,1,5)
 
        IF( config_flags%specified .or. config_flags%nested ) THEN 
          CALL spec_bdy_dry ( config_flags,                                    &
@@ -1063,10 +1065,6 @@ BENCH_START(relax_bdy_dry_tim)
      END DO
      !$OMP END PARALLEL DO
 BENCH_END(relax_bdy_dry_tim)
-!     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
-!     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
-!     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
-!     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
 !<DESCRIPTION>
 !<pre>
 ! (3) Small (acoustic,sound) steps.
@@ -1103,7 +1101,7 @@ BENCH_START(small_step_prep_tim)
     ! predictor because we may have changed the small timestep -> grid%dts.
 
        CALL wrf_debug ( 200 , ' call small_step_prep ' )
-
+       WRITE(6,*) "Before small_step_prep u_1=", grid%u_1(5,1,5), "u_2=", grid%u_2(5,1,5), "u_save=", grid%u_save(5,1,5), 'muu=', grid%muu(5,5), 'muus=', grid%muus(5,5)
        CALL small_step_prep( grid%u_1,grid%u_2,grid%v_1,grid%v_2,grid%w_1,grid%w_2,   &
                              grid%t_1,grid%t_2,grid%ph_1,grid%ph_2,                   &
                              grid%ru_tend_acst, grid%rv_tend_acst,                    & ! kranke
@@ -1126,11 +1124,7 @@ BENCH_START(small_step_prep_tim)
                              grid%i_start(ij), grid%i_end(ij),                        &
                              grid%j_start(ij), grid%j_end(ij),                        &
                              k_start    , k_end                                       )
-!     WRITE(6,*) 'AFTER small_step_prep' 
-!     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
-!     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
-!     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
-!     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
+       WRITE(6,*) "After small_step_prep u_1=", grid%u_1(5,1,5), "u_2=", grid%u_2(5,1,5), "u_save=", grid%u_save(5,1,5), 'muu=', grid%muu(5,5), 'muus=', grid%muus(5,5)
 
  
        CALL calc_p_rho( grid%al, grid%p, grid%ph_2,                 &
@@ -1303,6 +1297,7 @@ BENCH_END(set_phys_bc2_tim)
        DO ij = 1 , grid%num_tiles
 
 BENCH_START(advance_uv_tim)
+         WRITE(6,*) "--- RK step", rk_step, "Iteration", iteration, " Entering advance_uv"
          CALL advance_uv ( grid%u_2, grid%ru_tend, grid%v_2, grid%rv_tend,        &
                            grid%p, grid%pb,                                       &
                            grid%ph_2, grid%php, grid%alt,  grid%al, grid%mu_2,    &
@@ -1324,6 +1319,7 @@ BENCH_START(advance_uv_tim)
                            grid%j_start(ij), grid%j_end(ij),                      &
                            k_start    , k_end                                     )
 BENCH_END(advance_uv_tim)
+       WRITE(6,*) "--- After advance_uv: u_1=", grid%u_1(5,1,5), "u_2=", grid%u_2(5,1,5), "u_save=", grid%u_save(5,1,5), 'muu=', grid%muu(5,5), 'muus=', grid%muus(5,5)
 
        END DO
        !$OMP END PARALLEL DO
@@ -1790,6 +1786,7 @@ BENCH_START(small_step_finish_tim)
                                grid%i_start(ij), grid%i_end(ij), &
                                grid%j_start(ij), grid%j_end(ij), &
                                k_start    , k_end               )
+       WRITE(6,*) "After small_step_finish: u_1=", grid%u_1(5,1,5), "u_2=", grid%u_2(5,1,5), "u_save=", grid%u_save(5,1,5), 'muu=', grid%muu(5,5), 'muus=', grid%muus(5,5)
 !  call  to set ru_m, rv_m and ww_m b.c's for PD advection
 
 !     WRITE(6,*) 'AFTER small_step_finish'

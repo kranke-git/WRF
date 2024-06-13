@@ -448,7 +448,8 @@ SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
   ENDDO
   ENDDO
   ENDDO
-
+  WRITE(6,*) "IN finish: muus=", muus(5,5), "muu=", muu(5,5)
+  
   DO j = j_start, j_end
   DO k = kds, kde
   DO i = i_start, i_end
@@ -1243,7 +1244,7 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
               ( u(i+1,k,j)*(t_1(i+1,k,j)+t_1(i  ,k,j))     &
                -u(i  ,k,j)*(t_1(i  ,k,j)+t_1(i-1,k,j)) ) ) &
              + rdnw(k)*( wdtn(i,k+1)-wdtn(i,k) ) )       
-     t_tend_acst(i,k,j)=t(i,k,j)-t_old
+     t_tend_acst(i,k,j)=t_tend_acst(i,k,j) + ( t(i,k,j)-t_old ) ! kranke
      ENDDO
      ENDDO
    ENDDO
