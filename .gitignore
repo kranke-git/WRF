@@ -52,10 +52,9 @@ test/em_real/eclipse_besselian_elements.dat
 test/em_real/ishmael-gamma-tab.bin
 test/em_real/ishmael-qi-qc.bin
 test/em_real/ishmael-qi-qr.bin
-test/em_real/p3_lookupTable_1.dat-3momI_v5.1.7
-test/em_real/p3_lookupTable_1.dat-5.3-2momI
-test/em_real/p3_lookupTable_2.dat-2momI_v5.2.3
+test/em_real/p3_lookupTable_*
 test/em_real/wind-turbine-1.tbl
+main/st*
 tools/fseeko64_test
 tools/fseeko_test
 tools/gen_comms.c
