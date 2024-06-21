@@ -13,6 +13,7 @@ module load mpich
 
 fsync $SGE_STDOUT_PATH &
 
+EXEDIR="/afs/crc/group/EnvStat/PreCompiledExe/WRFEXE"
 EXENAME='WRF451REAL_DMPAR_MPICH_MPI64CRIPPANODES_Z0'
 
 export NETCDF='/afs/crc/group/EnvStat/build'
@@ -24,8 +25,8 @@ export GEOTIFF='/afs/crc/group/EnvStat/build/lib'
 
 echo 15 | ./configure #Intel (dmpar) - MPI
 ./compile em_real
-mkdir                                  main/executables/${EXENAME}
-cp -p main/real.exe                    main/executables/${EXENAME}
-cp -p main/wrf.exe                     main/executables/${EXENAME}
+mkdir                                  ${EXEDIR}/${EXENAME}
+cp -p main/real.exe                    ${EXEDIR}/${EXENAME}
+cp -p main/wrf.exe                     ${EXEDIR}/${EXENAME}
 #cp -p dyn_em/module_initialize_ideal.F main/executables/${EXENAME}
-cp -p configure_and_compile.pbs        main/executables/${EXENAME}
+cp -p configure_and_compile.pbs        ${EXEDIR}/${EXENAME}
