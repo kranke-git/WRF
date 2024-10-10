@@ -933,11 +933,11 @@ SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
        ru_tend_acst(i,k,j)=-dts*cqu(i,k,j)*dpxy(i,k)+(c1h(k)*mudf_xy(i)) + ru_tend_acst(i,k,j)
      ENDDO
    ENDDO
-!   IF ( j .eq. 5 ) THEN
-!     WRITE(6,*) '--- Inside acoustic loop: ACOUSTIC part of change is', -dts*cqu(25,25,j)*dpxy(25,25)+(c1h(25)*mudf_xy(25))
-!   ENDIF
-   ENDDO u_outer_j_loop
-!   WRITE(6,*) '--- Inside acoustic loop: RU_TEND part of change is',  dts*ru_tend(25,25,5)
+   IF ( j .eq. 5 ) THEN
+     WRITE(6,*) '--- Inside acoustic loop: ACOUSTIC part of change is', -dts*cqu(25,25,j)*dpxy(25,25)+(c1h(25)*mudf_xy(25))
+   ENDIF
+  ENDDO u_outer_j_loop
+   WRITE(6,*) '--- Inside acoustic loop: RU_TEND part of change is',  dts*ru_tend(25,25,5)
 ! now v
   v_outer_j_loop: DO j = j_start_v_tend, j_end_v_tend
    DO k = k_start, k_end
