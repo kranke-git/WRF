@@ -24,7 +24,7 @@ export GEOTIFF='/afs/crc/group/EnvStat/build/lib'
 #./configure
 # echo 15 | ./configure #Intel (dmpar) - MPI
 # echo 14 | ./configure #Intel (smpar)   - openmp
-echo 13 | ./configure   #Intel (serial)
+echo 78 | ./configure   #Intel (serial)
 ./compile em_les
 #./compile em_real
 

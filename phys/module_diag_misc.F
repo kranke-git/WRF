@@ -856,7 +856,7 @@ CONTAINS
                       ips,ipe, jps,jpe, kps,kpe,                                    & ! patch dims  (patch=MPI-rank)
                       i_start,i_end,j_start,j_end,num_tiles,                        & ! tile dims (useless for MPI-only builds)
                       curr_secs2, history_interval,                                 & ! time parameters
-                      c1h, c2h, muus, muvs, muts, msfuy, msfvx, msft, dt,           & ! parameters to decouple tendencies (mu*u -> u) 
+                      c1h, c2h, muu, muv, mut, msfuy, msfvx, msft, dt,              & ! parameters to decouple tendencies (mu*u -> u) 
                       ru_tend, ru_tend_adv, ru_tend_pgf, ru_tend_cor,               &
                       ru_tend_curv, ru_tend_hdiff, ru_tend_phys, ru_tend_damp,      &
                       ru_tend_vdiff, ru_tend_6diff, rv_tend, rv_tend_adv,           &
@@ -944,9 +944,9 @@ CONTAINS
     
    ! Parameters for decoupling
    REAL , DIMENSION( kms:kme ) ,    INTENT(IN   ) :: c1h, c2h
-   REAL , DIMENSION( ims:ime , jms:jme ) , INTENT(IN   ) :: muus, muvs,   &
+   REAL , DIMENSION( ims:ime , jms:jme ) , INTENT(IN   ) :: muu, muv,   &
                                                             msfuy, msfvx, &
-							    msft, muts
+							    msft, mut
    REAL :: decfac
   
 !----------------------------------------------------------------
@@ -967,7 +967,7 @@ CONTAINS
      ktf = MIN( kte, kde-1 ) ! unstaggered tile k-index final
      itf = MIN( ite, ide-1 ) ! unstaggered tile i-index final
      jtf = MIN( jte, jde-1 ) ! unstaggered tile j-index final 
-
+     WRITE(6,*) "inside diagnostic code, muu=", muu(5,5)
      ! Now reset accumulation to zero if it is the right time in the model integration
      IF (mod(curr_secs2, history_interval*60.) == 0.) THEN
 
@@ -1032,7 +1032,7 @@ CONTAINS
          DO k=kts,ktf   ! unstaggered
            DO i=its,ite ! staggered
              ! calculate factor to decouple tendency (mu * u --> u )
-             decfac = (c1h(k)*muus(i,j)+c2h(k))/msfuy(i,j)
+             decfac = (c1h(k)*muu(i,j)+c2h(k))/msfuy(i,j)
              ! u-tendencies      
              aru_tend(i,k,j)       = aru_tend(i,k,j)       +  ru_tend(i,k,j)*dt/decfac
              aru_tend_adv(i,k,j)   = aru_tend_adv(i,k,j)   +  ru_tend_adv(i,k,j)*dt/decfac
@@ -1044,7 +1044,7 @@ CONTAINS
              aru_tend_damp(i,k,j)  = aru_tend_damp(i,k,j)  +  ru_tend_damp(i,k,j)*dt/decfac
              aru_tend_vdiff(i,k,j) = aru_tend_vdiff(i,k,j) +  ru_tend_vdiff(i,k,j)*dt/decfac
              aru_tend_6diff(i,k,j) = aru_tend_6diff(i,k,j) +  ru_tend_6diff(i,k,j)*dt/decfac
-             aru_tend_acst(i,k,j)  = aru_tend_acst(i,k,j)  +  ru_tend_acst(i,k,j)/decfac ! Note: no dt
+             aru_tend_acst(i,k,j)  = aru_tend_acst(i,k,j)  +  ru_tend_acst(i,k,j)/decfac ! Note: no dt because included in the advance_uv code
            ENDDO
          ENDDO
        ENDDO
@@ -1053,7 +1053,7 @@ CONTAINS
          DO k=kts,ktf   ! unstaggered
            DO i=its,itf ! unstaggered
            ! calculate factor to decouple tendency (mu * u --> u )
-           decfac = (c1h(k)*muvs(i,j)+c2h(k))/msfvx(i,j)
+           decfac = (c1h(k)*muv(i,j)+c2h(k))/msfvx(i,j)
            ! v-tendencies
            arv_tend(i,k,j)       = arv_tend(i,k,j)       +  rv_tend(i,k,j)*dt/decfac
            arv_tend_adv(i,k,j)   = arv_tend_adv(i,k,j)   +  rv_tend_adv(i,k,j)*dt/decfac
@@ -1065,7 +1065,7 @@ CONTAINS
            arv_tend_damp(i,k,j)  = arv_tend_damp(i,k,j)  +  rv_tend_damp(i,k,j)*dt/decfac
            arv_tend_vdiff(i,k,j) = arv_tend_vdiff(i,k,j) +  rv_tend_vdiff(i,k,j)*dt/decfac
            arv_tend_6diff(i,k,j) = arv_tend_6diff(i,k,j) +  rv_tend_6diff(i,k,j)*dt/decfac
-           arv_tend_acst(i,k,j)  = arv_tend_acst(i,k,j)  +  rv_tend_acst(i,k,j)/decfac      ! Note: no dt
+           arv_tend_acst(i,k,j)  = arv_tend_acst(i,k,j)  +  rv_tend_acst(i,k,j)/decfac      ! Note: no dt because included in the advance_uv code
          ENDDO
        ENDDO
      ENDDO
@@ -1075,7 +1075,7 @@ CONTAINS
          DO k=kts,ktf   ! unstaggered
            DO i=its,itf ! unstaggered
 	     ! Decoupling factor
-             decfac = c1h(k)*muts(i,j)+c2h(k)
+             decfac = c1h(k)*mut(i,j)+c2h(k)
 	     ! Moisture related stuff
              arq_tend_adv(i,k,j)  = arq_tend_adv(i,k,j)  + RQVFTEN(i,k,j)*dt
 	     ! theta related stuff
@@ -1085,7 +1085,7 @@ CONTAINS
              at_tend_damp(i,k,j)  = at_tend_damp(i,k,j)  +  t_tend_damp(i,k,j)*dt/decfac
              at_tend_vdiff(i,k,j) = at_tend_vdiff(i,k,j) +  t_tend_vdiff(i,k,j)*dt/decfac
              at_tend_6diff(i,k,j) = at_tend_6diff(i,k,j) +  t_tend_6diff(i,k,j)*dt/decfac
-             at_tend_acst(i,k,j)  = at_tend_acst(i,k,j)  +  t_tend_acst(i,k,j)/decfac       ! Note: no dt
+             at_tend_acst(i,k,j)  = at_tend_acst(i,k,j)  +  t_tend_acst(i,k,j)/decfac       ! Note: no dt because included in the advance_t code
            ENDDO
          ENDDO
        ENDDO

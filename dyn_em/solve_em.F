@@ -646,9 +646,6 @@ SUBROUTINE solve_em ( grid , config_flags  &
 BENCH_START(step_prep_tim)
      !$OMP PARALLEL DO   &
      !$OMP PRIVATE ( ij )
-     WRITE(6,*) 'RK STEP is', rk_step 
-     WRITE(6,*) 'Number of Small Time Steps is', number_of_small_timesteps 
-     WRITE(6,*) 'RK time step is', dt_rk
      DO ij = 1 , grid%num_tiles
 
        CALL rk_step_prep  ( config_flags, rk_step,            &
@@ -854,6 +851,10 @@ BENCH_START(calc_p_rho_tim)
                              , grid%rv_tend_damp                & !kranke
                              , grid%rv_tend_vdiff               & !kranke
                              , grid%rv_tend_hdiff               & !kranke
+                             , grid%t_tend_phys                 & !kranke
+                             , grid%t_tend_damp                 & !kranke
+                             , grid%t_tend_vdiff                & !kranke
+                             , grid%t_tend_hdiff                & !kranke
                              , rw_tendf, t_tendf                &
                              , ph_tendf, mu_tendf               &
                              , tke_tend                         &
@@ -889,6 +890,8 @@ BENCH_START(rk_tend_tim)
                          ,grid%ru_tend_hdiff, grid%ru_tend_vdiff, grid%ru_tend_damp, grid%ru_tend_6diff        & ! kranke
                          ,grid%rv_tend_cor, grid%rv_tend_adv, grid%rv_tend_pgf, grid%rv_tend_curv              & ! kranke
                          ,grid%rv_tend_hdiff, grid%rv_tend_vdiff, grid%rv_tend_damp, grid%rv_tend_6diff        & ! kranke
+                         ,grid%t_tend_adv, grid%t_tend_hdiff, grid%t_tend_vdiff, grid%t_tend_damp              & ! kranke
+                         ,grid%t_tend_6diff                                                                    & ! kranke
                          ,ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf                                      &
                          ,mu_tend, grid%u_save, grid%v_save, w_save, ph_save                                   &
                          ,grid%t_save, mu_save, grid%rthften                                                   &
@@ -972,7 +975,8 @@ BENCH_START(relax_bdy_dry_tim)
                               k_start, k_end                              )
 
        ENDIF
-
+        
+       WRITE(6,*) "Before rk_addtend_dry, ru_tend is", grid%ru_tend(5,5,5), "ru_tendf is", ru_tendf(5,5,5)
        CALL rk_addtend_dry( grid%ru_tend,  grid%rv_tend,  rw_tend,  ph_tend,  t_tend,  &
                             ru_tendf, rv_tendf, rw_tendf, ph_tendf, t_tendf, &
                             grid%u_save, grid%v_save, w_save, ph_save, grid%t_save, &
@@ -987,6 +991,7 @@ BENCH_START(relax_bdy_dry_tim)
                             grid%i_start(ij), grid%i_end(ij),                &
                             grid%j_start(ij), grid%j_end(ij),                &
                             k_start, k_end                                  )
+       WRITE(6,*) "After rk_addtend_dry, ru_tend is", grid%ru_tend(5,5,5), "ru_tendf is", ru_tendf(5,5,5)
 
        IF( config_flags%specified .or. config_flags%nested ) THEN 
          CALL spec_bdy_dry ( config_flags,                                    &
@@ -1057,10 +1062,6 @@ BENCH_START(relax_bdy_dry_tim)
      END DO
      !$OMP END PARALLEL DO
 BENCH_END(relax_bdy_dry_tim)
-     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
-     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
-     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
-     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
 !<DESCRIPTION>
 !<pre>
 ! (3) Small (acoustic,sound) steps.
@@ -1097,11 +1098,12 @@ BENCH_START(small_step_prep_tim)
     ! predictor because we may have changed the small timestep -> grid%dts.
 
        CALL wrf_debug ( 200 , ' call small_step_prep ' )
-
+       WRITE(6,*) "Before small_step_prep u_1=", grid%u_1(5,5,5), "u_2=", grid%u_2(5,5,5), "u_save=", grid%u_save(5,5,5), 'muu=', grid%muu(5,5), 'muus=', grid%muus(5,5)
        CALL small_step_prep( grid%u_1,grid%u_2,grid%v_1,grid%v_2,grid%w_1,grid%w_2,   &
                              grid%t_1,grid%t_2,grid%ph_1,grid%ph_2,                   &
                              grid%ru_tend_acst, grid%rv_tend_acst,                    & ! kranke
                              grid%ru_tend_r, grid%rv_tend_r,                          & ! kranke
+                             grid%t_tend_acst,                                        & ! kranke
                              grid%mub, grid%mu_1, grid%mu_2,                          &
                              grid%muu, grid%muus, grid%muv, grid%muvs,                &
                              grid%mut, grid%muts, grid%mudf,                          &
@@ -1119,11 +1121,7 @@ BENCH_START(small_step_prep_tim)
                              grid%i_start(ij), grid%i_end(ij),                        &
                              grid%j_start(ij), grid%j_end(ij),                        &
                              k_start    , k_end                                       )
-     WRITE(6,*) 'AFTER small_step_prep' 
-     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
-     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
-     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
-     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
+       WRITE(6,*) "After small_step_prep u_1=", grid%u_1(5,5,5), "u_2=", grid%u_2(5,5,5), "u_save=", grid%u_save(5,5,5), 'muu=', grid%muu(5,5), 'muus=', grid%muus(5,5)
 
  
        CALL calc_p_rho( grid%al, grid%p, grid%ph_2,                 &
@@ -1296,12 +1294,13 @@ BENCH_END(set_phys_bc2_tim)
        DO ij = 1 , grid%num_tiles
 
 BENCH_START(advance_uv_tim)
+         WRITE(6,*) "--- RK step", rk_step, "Iteration", iteration, " Entering advance_uv"
          CALL advance_uv ( grid%u_2, grid%ru_tend, grid%v_2, grid%rv_tend,        &
                            grid%p, grid%pb,                                       &
-                           grid%ph_2, grid%php, grid%alt,  grid%al,               &
+                           grid%ph_2, grid%php, grid%alt,  grid%al, grid%mu_2,    &
                            grid%ru_tend_acst, grid%rv_tend_acst,                  & ! kranke
                            grid%ru_tend_r, grid%rv_tend_r,                        & ! kranke
-                           grid%mu_2, grid%muu, cqu, grid%muv, cqv, grid%mudf,    &
+                           grid%muu, cqu, grid%muv, cqv, grid%mudf,               &
                            grid%c1h, grid%c2h, grid%c1f, grid%c2f,                &
                            grid%c3h, grid%c4h, grid%c3f, grid%c4f,                &
                            grid%msfux, grid%msfuy, grid%msfvx,                    &
@@ -1317,6 +1316,7 @@ BENCH_START(advance_uv_tim)
                            grid%j_start(ij), grid%j_end(ij),                      &
                            k_start    , k_end                                     )
 BENCH_END(advance_uv_tim)
+       WRITE(6,*) "--- After advance_uv: u_1=", grid%u_1(5,5,5), "u_2=", grid%u_2(5,5,5), "u_save=", grid%u_save(5,5,5), 'muu=', grid%muu(5,5), 'muus=', grid%muus(5,5)
 
        END DO
        !$OMP END PARALLEL DO
@@ -1428,7 +1428,7 @@ BENCH_START(advance_mu_t_tim)
                           ims, ime, jms, jme, kms, kme,      &
                           grid%i_start(ij), grid%i_end(ij),  &
                           grid%j_start(ij), grid%j_end(ij),  &
-                          k_start    , k_end                )
+                          k_start    , k_end, grid%t_tend_acst    ) !kranke
 BENCH_END(advance_mu_t_tim)
        ENDDO
        !$OMP END PARALLEL DO
@@ -1740,11 +1740,6 @@ BENCH_END(phys_bc_tim)
 
      END DO small_steps
      
-     WRITE(6,*) 'AFTER ACOUSTIC LOOP'
-     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
-     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
-     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
-     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
 
      !$OMP PARALLEL DO   &
      !$OMP PRIVATE ( ij )
@@ -1783,13 +1778,8 @@ BENCH_START(small_step_finish_tim)
                                grid%i_start(ij), grid%i_end(ij), &
                                grid%j_start(ij), grid%j_end(ij), &
                                k_start    , k_end               )
+       WRITE(6,*) "After small_step_finish: u_1=", grid%u_1(5,5,5), "u_2=", grid%u_2(5,5,5), "u_save=", grid%u_save(5,5,5), 'muu=', grid%muu(5,5), 'muus=', grid%muus(5,5)
 !  call  to set ru_m, rv_m and ww_m b.c's for PD advection
-
-     WRITE(6,*) 'AFTER small_step_finish'
-     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
-     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
-     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
-     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
 
 
        IF (rk_step == rk_order) THEN
@@ -3850,6 +3840,7 @@ BENCH_START(micro_driver_tim)
       &        , SNOWNC=grid%snownc, SNOWNCV=grid%snowncv                 &
       &        , GRAUPELNC=grid%graupelnc, GRAUPELNCV=grid%graupelncv     & ! for milbrandt2mom
       &        , HAILNC=grid%hailnc, HAILNCV=grid%hailncv                 &
+      &        , HAIL_MAXK1=grid%hail_maxk1,HAIL_MAX2D=grid%hail_max2d    &
       &        , W=grid%w_2, Z=grid%z, HT=grid%ht                         &
       &        , MP_RESTART_STATE=grid%mp_restart_state                   &
       &        , TBPVS_STATE=grid%tbpvs_state                             & ! etampnew
@@ -3899,11 +3890,11 @@ BENCH_START(micro_driver_tim)
       &        , QNI3_CURR=scalar(ims,kms,jms,P_QNI3), F_QNI3=F_QNI3      & ! for Jensen ISHMAEL
       &        , QVOLI3_CURR=scalar(ims,kms,jms,P_QVOLI3), F_QVOLI3=F_QVOLI3  & ! for Jensen ISHMAEL
       &        , QAOLI3_CURR=scalar(ims,kms,jms,P_QAOLI3), F_QAOLI3=F_QAOLI3  & ! for Jensen ISHMAEL
-!       &        , QZR_CURR=scalar(ims,kms,jms,P_QZR), F_QZR=F_QZR          & ! for milbrandt3mom
+       &        , QZR_CURR=scalar(ims,kms,jms,P_QZR), F_QZR=F_QZR          & ! for milbrandt3mom
        &        , QZI_CURR=scalar(ims,kms,jms,P_QZI), F_QZI=F_QZI          & ! for 3-moment P3
 !       &        , QZS_CURR=scalar(ims,kms,jms,P_QZS), F_QZS=F_QZS          & ! "
-!       &        , QZG_CURR=scalar(ims,kms,jms,P_QZG), F_QZG=F_QZG          & ! "
-!       &        , QZH_CURR=scalar(ims,kms,jms,P_QZH), F_QZH=F_QZH          & ! "
+       &        , QZG_CURR=scalar(ims,kms,jms,P_QZG), F_QZG=F_QZG          & ! "
+       &        , QZH_CURR=scalar(ims,kms,jms,P_QZH), F_QZH=F_QZH          & ! "
       &        , QVOLG_CURR=scalar(ims,kms,jms,P_QVOLG), F_QVOLG=F_QVOLG    & ! for nssl_2mom
       &        , QVOLH_CURR=scalar(ims,kms,jms,P_QVOLH), F_QVOLH=F_QVOLH    & ! for nssl_2mom
       &        , QDCN_CURR=scalar(ims,kms,jms,P_QDCN), F_QDCN=F_QDCN      & ! for ntu3m
@@ -4045,6 +4036,7 @@ BENCH_START(moist_phys_end_tim)
        jts = max(grid%j_start(ij),jds)
        jte = min(grid%j_end(ij),jde-1)
 
+       IF ( config_flags%mp_zero_out > 0 ) THEN
        CALL microphysics_zero_outb (                                    &
                       moist , num_moist , config_flags ,                &
                       ids, ide, jds, jde, kds, kde,                     &
@@ -4052,6 +4044,7 @@ BENCH_START(moist_phys_end_tim)
                       its, ite, jts, jte,                               &
                       k_start    , k_end                                )
 
+       IF ( config_flags%mp_zero_out_all > 0 ) THEN
        CALL microphysics_zero_outb (                                    &
                       scalar , num_scalar , config_flags ,              &
                       ids, ide, jds, jde, kds, kde,                     &
@@ -4060,7 +4053,7 @@ BENCH_START(moist_phys_end_tim)
                       k_start    , k_end                                )
 
        CALL microphysics_zero_outb (                                    &
-                      chem , num_chem , config_flags ,              &
+                      chem , num_chem , config_flags ,                  &
                       ids, ide, jds, jde, kds, kde,                     &
                       ims, ime, jms, jme, kms, kme,                     &
                       its, ite, jts, jte,                               &
@@ -4071,6 +4064,8 @@ BENCH_START(moist_phys_end_tim)
                       ims, ime, jms, jme, kms, kme,                     &
                       its, ite, jts, jte,                               &
                       k_start    , k_end                                )
+       ENDIF
+       ENDIF
 
        IF ( config_flags%periodic_x ) THEN
          its = max(grid%i_start(ij),ids)
@@ -4082,6 +4077,7 @@ BENCH_START(moist_phys_end_tim)
        jts = max(grid%j_start(ij),jds+sz)
        jte = min(grid%j_end(ij),jde-1-sz)
 
+       IF ( config_flags%mp_zero_out > 0 ) THEN
        CALL microphysics_zero_outa (                                    &
                       moist , num_moist , config_flags ,                &
                       ids, ide, jds, jde, kds, kde,                     &
@@ -4089,6 +4085,7 @@ BENCH_START(moist_phys_end_tim)
                       its, ite, jts, jte,                               &
                       k_start    , k_end                                )
 
+       IF ( config_flags%mp_zero_out_all > 0 ) THEN
        CALL microphysics_zero_outa (                                    &
                       scalar , num_scalar , config_flags ,              &
                       ids, ide, jds, jde, kds, kde,                     &
@@ -4109,6 +4106,8 @@ BENCH_START(moist_phys_end_tim)
                       ims, ime, jms, jme, kms, kme,                     &
                       its, ite, jts, jte,                               &
                       k_start    , k_end                                )
+       ENDIF
+       ENDIF
 
        CALL moist_physics_finish_em( grid%t_2, grid%t_1, t0, grid%muts, th_phy,  &
                                      grid%h_diabatic, dtm,                       &
@@ -5021,12 +5020,6 @@ BENCH_END(bc_2d_tim)
    end if
    firstime = .false.
 #endif
-
-     WRITE(6,*) 'At the end of solve_em.F'
-     WRITE(6,*) 'ru_tend(25,25,5) is', grid%ru_tend(25,25,5)
-     WRITE(6,*) 'u_2(25,25,5) is', grid%u_2(25,25,5)
-     WRITE(6,*) 'u_1(25,25,5) is', grid%u_1(25,25,5)
-     WRITE(6,*) 'u_save(25,25,5) is', grid%u_save(25,25,5)
 
    RETURN
 

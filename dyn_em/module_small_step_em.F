@@ -244,6 +244,10 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
     ENDDO
     ENDDO
 
+
+    WRITE(6,*) "---Right before calculation of u_2 in small_step_prep"
+    WRITE(6,*) "muus=", muus(5,5), "muu=", muu(5,5), "u_1", u_1(5,5,5), u_2(5,5,5)
+    WRITE(6,*) "muus multiplies u_1; muu multiplies u_2"
     DO j=j_start, j_end
     DO k=k_start, k_end
     DO i=i_start, i_endu
@@ -332,10 +336,6 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
 
     END IF
     
-!    WRITE(6,*) 'INSIDE small_step_prep' 
-!    WRITE(6,*) 'cfac_s is', c1h(25)*muus(25,5)+c2h(25)
-!    WRITE(6,*) 'cfac is', c1h(25)*muu(25,5)+c2h(25)
-!    WRITE(6,*) 'Map Scale Factor is', msfuy(i,j)
 
 END SUBROUTINE small_step_prep
 
@@ -416,10 +416,6 @@ SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
 !
 !</DESCRIPTION>
 
-!  WRITE(6,*) 'INSIDE small_step_finish' 
-!  WRITE(6,*) 'cfac_s is', c1h(25)*muus(25,5)+c2h(25)
-!  WRITE(6,*) 'cfac is', c1h(25)*muu(25,5)+c2h(25)
-!  WRITE(6,*) 'Map Scale Factor is', msfuy(25,5)
 
   i_start = its
   i_end   = min(ite,ide-1)
@@ -440,6 +436,9 @@ SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
   ENDDO
   ENDDO
 
+  WRITE(6,*) "--- Right before calculation of u in small_step_finish"
+  WRITE(6,*) "muus=", muus(5,5), "muu=", muu(5,5) 
+  WRITE(6,*) "muu is at numerator; muus at denominator"
   DO j = j_start, j_end
   DO k = kds, kde-1
   DO i = i_start, i_endu
@@ -448,7 +447,6 @@ SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
   ENDDO
   ENDDO
   ENDDO
-  WRITE(6,*) "IN finish: muus=", muus(5,5), "muu=", muu(5,5)
   
   DO j = j_start, j_end
   DO k = kds, kde
@@ -934,10 +932,10 @@ SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
      ENDDO
    ENDDO
    IF ( j .eq. 5 ) THEN
-     WRITE(6,*) '--- Inside acoustic loop: ACOUSTIC part of change is', -dts*cqu(25,25,j)*dpxy(25,25)+(c1h(25)*mudf_xy(25))
+     WRITE(6,*) '--- Inside acoustic loop: ACOUSTIC part of change is',-dts*cqu(5,5,j)*dpxy(5,5)+(c1h(5)*mudf_xy(5))
    ENDIF
   ENDDO u_outer_j_loop
-   WRITE(6,*) '--- Inside acoustic loop: RU_TEND part of change is',  dts*ru_tend(25,25,5)
+   WRITE(6,*) '--- Inside acoustic loop: RU_TEND part of change is',  dts*ru_tend(5,5,5)
 ! now v
   v_outer_j_loop: DO j = j_start_v_tend, j_end_v_tend
    DO k = k_start, k_end

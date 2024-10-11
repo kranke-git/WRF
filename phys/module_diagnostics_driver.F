@@ -413,9 +413,9 @@ CONTAINS
                 ,J_START=grid%j_start,J_END=grid%j_end                                 & ! j-start;end vector for tiles in patch
                 ,NUM_TILES=grid%num_tiles                                              & ! Number of Tiles
                 ,CURR_SECS2=curr_secs2,HISTORY_INTERVAL=grid%history_interval          & ! Time Parameters
-                ,C1H=grid%c1h,C2H=grid%c2h,MUUS=grid%muus,MUVS=grid%muvs               & ! Decoupling parameters
-                ,MUTS=grid%muts                                                        & ! Decoupling parameters
-                ,MSFUY=grid%msfuy,MSFVX=grid%msfvx,MSFT=grid%msft                        & ! Decoupling parameters
+                ,C1H=grid%c1h,C2H=grid%c2h,MUU=grid%muu,MUV=grid%muv                   & ! Decoupling parameters
+                ,MUT=grid%mut                                                          & ! Decoupling parameters
+                ,MSFUY=grid%msfuy,MSFVX=grid%msfvx,MSFT=grid%msft                      & ! Decoupling parameters
                 ,DT=grid%dt                                                            & ! Time step
                 ! kranke time-step tendencies
                 ,ru_tend=grid%ru_tend,ru_tend_adv=grid%ru_tend_adv                     &

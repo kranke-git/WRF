@@ -1,6 +1,0 @@
-if [ -z "0" ] || [ 0 -eq 0 ] ; then \
- ( cd tools ; /bin/rm -f nc4_test.{exe,nc,o} ; icc -o nc4_test.exe nc4_test.c -I/afs/crc/group/EnvStat/build/include -L/afs/crc/group/EnvStat/build/lib -lnetcdf -L/afs/crc/group/EnvStat/build/lib -lnetcdff ; cd .. ) ; \
-else \
- ( cd tools ; /bin/rm -f nc4_test.{exe,nc,o} ; mpicc -cc=icc -o nc4_test.exe nc4_test.c -I/afs/crc/group/EnvStat/build/include -L/afs/crc/group/EnvStat/build/lib -lnetcdf -L/afs/crc/group/EnvStat/build/lib -lnetcdff ; cd ..  ) ; \
-fi
-/bin/sh: line 2: icc: command not found
