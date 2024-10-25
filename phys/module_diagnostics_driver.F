@@ -428,7 +428,7 @@ CONTAINS
                 ,rv_tend_curv=grid%rv_tend_curv,rv_tend_hdiff=grid%rv_tend_hdiff       &
                 ,rv_tend_phys=grid%rv_tend_phys,rv_tend_damp=grid%rv_tend_damp         &
                 ,rv_tend_vdiff=grid%rv_tend_vdiff,rv_tend_6diff=grid%rv_tend_6diff     &
-                ,t_tend_adv=grid%t_tend_adv                                            &
+                ,t_tend_r=grid%t_tend_r, t_tend_adv=grid%t_tend_adv                    &
                 ,t_tend_hdiff=grid%t_tend_hdiff, t_tend_phys=grid%t_tend_phys          &
                 ,t_tend_damp=grid%t_tend_damp, t_tend_vdiff=grid%t_tend_vdiff          &
                 ,t_tend_6diff=grid%t_tend_6diff                                        &
@@ -443,7 +443,7 @@ CONTAINS
                 ,arv_tend_curv=grid%arv_tend_curv,arv_tend_hdiff=grid%arv_tend_hdiff   &
                 ,arv_tend_phys=grid%arv_tend_phys,arv_tend_damp=grid%arv_tend_damp     &
                 ,arv_tend_vdiff=grid%arv_tend_vdiff,arv_tend_6diff=grid%arv_tend_6diff &
-                ,at_tend_adv=grid%at_tend_adv                                          &
+                ,at_tend_r=grid%at_tend_r, at_tend_adv=grid%at_tend_adv                &
                 ,at_tend_hdiff=grid%at_tend_hdiff, at_tend_phys=grid%at_tend_phys      &
                 ,at_tend_damp=grid%at_tend_damp, at_tend_vdiff=grid%at_tend_vdiff      &
                 ,at_tend_6diff=grid%at_tend_6diff                                      &

@@ -856,20 +856,20 @@ CONTAINS
                       ips,ipe, jps,jpe, kps,kpe,                                    & ! patch dims  (patch=MPI-rank)
                       i_start,i_end,j_start,j_end,num_tiles,                        & ! tile dims (useless for MPI-only builds)
                       curr_secs2, history_interval,                                 & ! time parameters
-                      c1h, c2h, muu, muv, mut, msfuy, msfvx, msft, dt,              & ! parameters to decouple tendencies (mu*u -> u) 
+                      c1h, c2h, muu, muv, mut, msfuy, msfvx, msft, dt,              & ! parameters to decouple tendencies (mu*u -> u)
                       ru_tend, ru_tend_adv, ru_tend_pgf, ru_tend_cor,               &
                       ru_tend_curv, ru_tend_hdiff, ru_tend_phys, ru_tend_damp,      &
                       ru_tend_vdiff, ru_tend_6diff, rv_tend, rv_tend_adv,           &
                       rv_tend_pgf, rv_tend_cor, rv_tend_curv, rv_tend_hdiff,        &
                       rv_tend_phys, rv_tend_damp, rv_tend_vdiff, rv_tend_6diff,     &
-                      t_tend_adv, t_tend_hdiff, t_tend_phys,                &
+                      t_tend_r, t_tend_adv, t_tend_hdiff, t_tend_phys,              &
                       t_tend_damp, t_tend_vdiff, t_tend_6diff,                      &
                       aru_tend, aru_tend_adv, aru_tend_pgf, aru_tend_cor,           &
                       aru_tend_curv, aru_tend_hdiff, aru_tend_phys, aru_tend_damp,  &
                       aru_tend_vdiff, aru_tend_6diff, arv_tend, arv_tend_adv,       &
                       arv_tend_pgf, arv_tend_cor, arv_tend_curv, arv_tend_hdiff,    &
                       arv_tend_phys, arv_tend_damp, arv_tend_vdiff, arv_tend_6diff, &
-                      at_tend_adv, at_tend_hdiff, at_tend_phys,            &
+                      at_tend_r, at_tend_adv, at_tend_hdiff, at_tend_phys,          &
                       at_tend_damp, at_tend_vdiff, at_tend_6diff,                   &
                       aru_tend_acst, arv_tend_acst, ru_tend_acst, rv_tend_acst,     &
                       t_tend_acst, at_tend_acst,                                    &
@@ -907,7 +907,7 @@ CONTAINS
                                           arv_tend_vdiff, arv_tend_6diff, &
 					  arv_tend_acst,                  &
 					  ! theta-related
-                                          at_tend_adv,                   &
+                                          at_tend_r, at_tend_adv,        &
                                           at_tend_hdiff, at_tend_phys,   &
                                           at_tend_damp,  at_tend_vdiff,  &
                                           at_tend_6diff, at_tend_acst,   &
@@ -931,7 +931,7 @@ CONTAINS
                                           rv_tend_vdiff, rv_tend_6diff, &
                                           rv_tend_acst,                 &
                                           ! theta-related
-                                          t_tend_adv,                   &
+                                          t_tend_r,t_tend_adv,          &
                                           t_tend_hdiff, t_tend_phys,    &
                                           t_tend_damp,  t_tend_vdiff,   &
                                           t_tend_6diff, t_tend_acst,    &
@@ -967,7 +967,8 @@ CONTAINS
      ktf = MIN( kte, kde-1 ) ! unstaggered tile k-index final
      itf = MIN( ite, ide-1 ) ! unstaggered tile i-index final
      jtf = MIN( jte, jde-1 ) ! unstaggered tile j-index final 
-     WRITE(6,*) "inside diagnostic code, muu=", muu(5,5)
+     ! WRITE(6,*) "inside diagnostic code, muu=", muu(5,5), 'u_1=', u_1(5,1,5)
+     ! WRITE(6,*) "inside diagnostic code, calculation of final time step"  
      ! Now reset accumulation to zero if it is the right time in the model integration
      IF (mod(curr_secs2, history_interval*60.) == 0.) THEN
 
@@ -1015,6 +1016,7 @@ CONTAINS
            DO i=its,itf ! unstaggered
              arq_tend_adv(i,k,j)  = 0.
              at_tend_acst(i,k,j)  = 0.
+             at_tend_r(i,k,j)     = 0.
              at_tend_adv(i,k,j)   = 0.
              at_tend_hdiff(i,k,j) = 0.
              at_tend_phys(i,k,j)  = 0.
@@ -1034,17 +1036,17 @@ CONTAINS
              ! calculate factor to decouple tendency (mu * u --> u )
              decfac = (c1h(k)*muu(i,j)+c2h(k))/msfuy(i,j)
              ! u-tendencies      
-             aru_tend(i,k,j)       = aru_tend(i,k,j)       +  ru_tend(i,k,j)*dt/decfac
-             aru_tend_adv(i,k,j)   = aru_tend_adv(i,k,j)   +  ru_tend_adv(i,k,j)*dt/decfac
-             aru_tend_pgf(i,k,j)   = aru_tend_pgf(i,k,j)   +  ru_tend_pgf(i,k,j)*dt/decfac
-             aru_tend_cor(i,k,j)   = aru_tend_cor(i,k,j)   +  ru_tend_cor(i,k,j)*dt/decfac
-             aru_tend_curv(i,k,j)  = aru_tend_curv(i,k,j)  +  ru_tend_curv(i,k,j)*dt/decfac
-             aru_tend_hdiff(i,k,j) = aru_tend_hdiff(i,k,j) +  ru_tend_hdiff(i,k,j)*dt/decfac
-             aru_tend_phys(i,k,j)  = aru_tend_phys(i,k,j)  +  ru_tend_phys(i,k,j)*dt/decfac
-             aru_tend_damp(i,k,j)  = aru_tend_damp(i,k,j)  +  ru_tend_damp(i,k,j)*dt/decfac
-             aru_tend_vdiff(i,k,j) = aru_tend_vdiff(i,k,j) +  ru_tend_vdiff(i,k,j)*dt/decfac
-             aru_tend_6diff(i,k,j) = aru_tend_6diff(i,k,j) +  ru_tend_6diff(i,k,j)*dt/decfac
-             aru_tend_acst(i,k,j)  = aru_tend_acst(i,k,j)  +  ru_tend_acst(i,k,j)/decfac ! Note: no dt because included in the advance_uv code
+             aru_tend(i,k,j)       = aru_tend(i,k,j)       +  ru_tend(i,k,j)*dt
+             aru_tend_adv(i,k,j)   = aru_tend_adv(i,k,j)   +  ru_tend_adv(i,k,j)*dt
+             aru_tend_pgf(i,k,j)   = aru_tend_pgf(i,k,j)   +  ru_tend_pgf(i,k,j)*dt
+             aru_tend_cor(i,k,j)   = aru_tend_cor(i,k,j)   +  ru_tend_cor(i,k,j)*dt
+             aru_tend_curv(i,k,j)  = aru_tend_curv(i,k,j)  +  ru_tend_curv(i,k,j)*dt
+             aru_tend_hdiff(i,k,j) = aru_tend_hdiff(i,k,j) +  ru_tend_hdiff(i,k,j)*dt
+             aru_tend_phys(i,k,j)  = aru_tend_phys(i,k,j)  +  ru_tend_phys(i,k,j)*dt
+             aru_tend_damp(i,k,j)  = aru_tend_damp(i,k,j)  +  ru_tend_damp(i,k,j)*dt
+             aru_tend_vdiff(i,k,j) = aru_tend_vdiff(i,k,j) +  ru_tend_vdiff(i,k,j)*dt
+             aru_tend_6diff(i,k,j) = aru_tend_6diff(i,k,j) +  ru_tend_6diff(i,k,j)*dt
+             aru_tend_acst(i,k,j)  = aru_tend_acst(i,k,j)  +  ru_tend_acst(i,k,j)  ! Note: no dt because included in the advance_uv code
            ENDDO
          ENDDO
        ENDDO
@@ -1055,17 +1057,17 @@ CONTAINS
            ! calculate factor to decouple tendency (mu * u --> u )
            decfac = (c1h(k)*muv(i,j)+c2h(k))/msfvx(i,j)
            ! v-tendencies
-           arv_tend(i,k,j)       = arv_tend(i,k,j)       +  rv_tend(i,k,j)*dt/decfac
-           arv_tend_adv(i,k,j)   = arv_tend_adv(i,k,j)   +  rv_tend_adv(i,k,j)*dt/decfac
-           arv_tend_pgf(i,k,j)   = arv_tend_pgf(i,k,j)   +  rv_tend_pgf(i,k,j)*dt/decfac
-           arv_tend_cor(i,k,j)   = arv_tend_cor(i,k,j)   +  rv_tend_cor(i,k,j)*dt/decfac
-           arv_tend_curv(i,k,j)  = arv_tend_curv(i,k,j)  +  rv_tend_curv(i,k,j)*dt/decfac
-           arv_tend_hdiff(i,k,j) = arv_tend_hdiff(i,k,j) +  rv_tend_hdiff(i,k,j)*dt/decfac
-           arv_tend_phys(i,k,j)  = arv_tend_phys(i,k,j)  +  rv_tend_phys(i,k,j)*dt/decfac
-           arv_tend_damp(i,k,j)  = arv_tend_damp(i,k,j)  +  rv_tend_damp(i,k,j)*dt/decfac
-           arv_tend_vdiff(i,k,j) = arv_tend_vdiff(i,k,j) +  rv_tend_vdiff(i,k,j)*dt/decfac
-           arv_tend_6diff(i,k,j) = arv_tend_6diff(i,k,j) +  rv_tend_6diff(i,k,j)*dt/decfac
-           arv_tend_acst(i,k,j)  = arv_tend_acst(i,k,j)  +  rv_tend_acst(i,k,j)/decfac      ! Note: no dt because included in the advance_uv code
+           arv_tend(i,k,j)       = arv_tend(i,k,j)       +  rv_tend(i,k,j)*dt
+           arv_tend_adv(i,k,j)   = arv_tend_adv(i,k,j)   +  rv_tend_adv(i,k,j)*dt
+           arv_tend_pgf(i,k,j)   = arv_tend_pgf(i,k,j)   +  rv_tend_pgf(i,k,j)*dt
+           arv_tend_cor(i,k,j)   = arv_tend_cor(i,k,j)   +  rv_tend_cor(i,k,j)*dt
+           arv_tend_curv(i,k,j)  = arv_tend_curv(i,k,j)  +  rv_tend_curv(i,k,j)*dt
+           arv_tend_hdiff(i,k,j) = arv_tend_hdiff(i,k,j) +  rv_tend_hdiff(i,k,j)*dt
+           arv_tend_phys(i,k,j)  = arv_tend_phys(i,k,j)  +  rv_tend_phys(i,k,j)*dt
+           arv_tend_damp(i,k,j)  = arv_tend_damp(i,k,j)  +  rv_tend_damp(i,k,j)*dt
+           arv_tend_vdiff(i,k,j) = arv_tend_vdiff(i,k,j) +  rv_tend_vdiff(i,k,j)*dt
+           arv_tend_6diff(i,k,j) = arv_tend_6diff(i,k,j) +  rv_tend_6diff(i,k,j)*dt
+           arv_tend_acst(i,k,j)  = arv_tend_acst(i,k,j)  +  rv_tend_acst(i,k,j)      ! Note: no dt because included in the advance_uv code
          ENDDO
        ENDDO
      ENDDO
@@ -1079,13 +1081,14 @@ CONTAINS
 	     ! Moisture related stuff
              arq_tend_adv(i,k,j)  = arq_tend_adv(i,k,j)  + RQVFTEN(i,k,j)*dt
 	     ! theta related stuff
-             at_tend_adv(i,k,j)   = at_tend_adv(i,k,j)   +  t_tend_adv(i,k,j)*dt/decfac
-             at_tend_hdiff(i,k,j) = at_tend_hdiff(i,k,j) +  t_tend_hdiff(i,k,j)*dt/decfac
-             at_tend_phys(i,k,j)  = at_tend_phys(i,k,j)  +  t_tend_phys(i,k,j)*dt/decfac
-             at_tend_damp(i,k,j)  = at_tend_damp(i,k,j)  +  t_tend_damp(i,k,j)*dt/decfac
-             at_tend_vdiff(i,k,j) = at_tend_vdiff(i,k,j) +  t_tend_vdiff(i,k,j)*dt/decfac
-             at_tend_6diff(i,k,j) = at_tend_6diff(i,k,j) +  t_tend_6diff(i,k,j)*dt/decfac
-             at_tend_acst(i,k,j)  = at_tend_acst(i,k,j)  +  t_tend_acst(i,k,j)/decfac       ! Note: no dt because included in the advance_t code
+             at_tend_r(i,k,j)     = at_tend_r(i,k,j)     +  t_tend_r(i,k,j)*dt
+             at_tend_adv(i,k,j)   = at_tend_adv(i,k,j)   +  t_tend_adv(i,k,j)*dt
+             at_tend_hdiff(i,k,j) = at_tend_hdiff(i,k,j) +  t_tend_hdiff(i,k,j)*dt
+             at_tend_phys(i,k,j)  = at_tend_phys(i,k,j)  +  t_tend_phys(i,k,j)*dt
+             at_tend_damp(i,k,j)  = at_tend_damp(i,k,j)  +  t_tend_damp(i,k,j)*dt
+             at_tend_vdiff(i,k,j) = at_tend_vdiff(i,k,j) +  t_tend_vdiff(i,k,j)*dt
+             at_tend_6diff(i,k,j) = at_tend_6diff(i,k,j) +  t_tend_6diff(i,k,j)*dt
+             at_tend_acst(i,k,j)  = at_tend_acst(i,k,j)  +  t_tend_acst(i,k,j)       ! Note: no dt because included in the advance_t code
            ENDDO
          ENDDO
        ENDDO

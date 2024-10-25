@@ -245,9 +245,9 @@ SUBROUTINE small_step_prep( u_1, u_2, v_1, v_2, w_1, w_2, &
     ENDDO
 
 
-    WRITE(6,*) "---Right before calculation of u_2 in small_step_prep"
-    WRITE(6,*) "muus=", muus(5,5), "muu=", muu(5,5), "u_1", u_1(5,5,5), u_2(5,5,5)
-    WRITE(6,*) "muus multiplies u_1; muu multiplies u_2"
+!    WRITE(6,*) "---Right before calculation of u_2 in small_step_prep"
+!    WRITE(6,*) "muus=", muus(5,5), "muu=", muu(5,5), "u_1", u_1(5,5,5), u_2(5,5,5)
+!    WRITE(6,*) "muus multiplies u_1; muu multiplies u_2"
     DO j=j_start, j_end
     DO k=k_start, k_end
     DO i=i_start, i_endu
@@ -345,6 +345,7 @@ END SUBROUTINE small_step_prep
 SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
                               t_2, t_1, ph_2, ph_1, ww, ww1,   &
                               mu_2, mu_1,                      &
+                              ru_tend, ru_tend_acst,           &
                               mut, muts, muu, muus, muv, muvs, &
                               c1h, c2h, c1f, c2f,              &
                               c3h, c4h, c3f, c4f,              &
@@ -376,6 +377,8 @@ SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
                                                                  w_1, &
                                                                  t_1, &
                                                                  ww1, &
+								 ru_tend_acst, &
+								 ru_tend,      &
                                                                  ph_1
 
   REAL,   DIMENSION(ims:ime, kms:kme, jms:jme), INTENT(INOUT) :: u_2, &
@@ -436,9 +439,9 @@ SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
   ENDDO
   ENDDO
 
-  WRITE(6,*) "--- Right before calculation of u in small_step_finish"
-  WRITE(6,*) "muus=", muus(5,5), "muu=", muu(5,5) 
-  WRITE(6,*) "muu is at numerator; muus at denominator"
+!  WRITE(6,*) "--- Right before calculation of u in small_step_finish"
+!  WRITE(6,*) "muus=", muus(5,5), "muu=", muu(5,5), "mu_1=", mu_1(5,5) 
+!  WRITE(6,*) "muu is at numerator; muus at denominator"
   DO j = j_start, j_end
   DO k = kds, kde-1
   DO i = i_start, i_endu
@@ -484,6 +487,15 @@ SUBROUTINE small_step_finish( u_2, u_1, v_2, v_1, w_2, w_1,    &
     mu_2(i,j) = mu_2(i,j) + mu_save(i,j)
   ENDDO
   ENDDO
+
+  ! kranke add -- calculation to verify formulas
+!  IF ( ( rk_step == 3 ) ) THEN
+!    WRITE(6,*) "INSIDE small_step_finish, performing verification calculation"
+!    WRITE(6,*) "--- All relevant terms follow here:"
+!    WRITE(6,*) "--- u0=", u_1(5,5,5), 'mu0=', mu_2(5,5), "mu1=", muus(5,5), "dts=", dts, "ru_tend=", ru_tend(5,5,5), "ru_tend_acst=", ru_tend_acst(5,5,5)
+!    WRITE(6,*) "--- Calculation result is", (21347.3047*u_1(5,5,5) + 6*dts*ru_tend(5,5,5) + dts*ru_tend_acst(5,5,5))/muus(5,5)
+!  ENDIF
+
 
 END SUBROUTINE small_step_finish
 
@@ -931,11 +943,14 @@ SUBROUTINE advance_uv ( u, ru_tend, v, rv_tend,        &
        ru_tend_acst(i,k,j)=-dts*cqu(i,k,j)*dpxy(i,k)+(c1h(k)*mudf_xy(i)) + ru_tend_acst(i,k,j)
      ENDDO
    ENDDO
-   IF ( j .eq. 5 ) THEN
-     WRITE(6,*) '--- Inside acoustic loop: ACOUSTIC part of change is',-dts*cqu(5,5,j)*dpxy(5,5)+(c1h(5)*mudf_xy(5))
-   ENDIF
+!   IF ( j .eq. 5 ) THEN
+!     WRITE(6,*) '--- Inside acoustic loop: ACOUSTIC part of change is',-dts*cqu(5,5,j)*dpxy(5,5)+(c1h(5)*mudf_xy(5))
+!     WRITE(6,*) 'ru_tend_acst is', ru_tend_acst(5,5,j)
+!     WRITE(6,*) 'dts is', dts
+!   ENDIF
   ENDDO u_outer_j_loop
-   WRITE(6,*) '--- Inside acoustic loop: RU_TEND part of change is',  dts*ru_tend(5,5,5)
+ !  WRITE(6,*) '--- Inside acoustic loop: RU_TEND part of change is',  dts*ru_tend(5,5,5)
+ !  WRITE(6,*) 'ru_tend is', ru_tend(5,5,j)
 ! now v
   v_outer_j_loop: DO j = j_start_v_tend, j_end_v_tend
    DO k = k_start, k_end
@@ -1040,7 +1055,7 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
                          c1h, c2h, c1f, c2f,                  &
                          c3h, c4h, c3f, c4f,                  &
                          uam, vam, wwam, t, t_1,              &
-                         t_ave, ft, mu_tend,                  &
+                         t_ave, ft, mu_tend, t_tend_r,        &
                          rdx, rdy, dts, epssm,                &
                          dnw, fnm, fnp, rdnw,                 &
                          msfux, msfuy, msfvx, msfvx_inv,      &
@@ -1066,15 +1081,16 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
                                               v_1, &
                                               t_1, &
                                               ft
-  REAL, DIMENSION( ims:ime , kms:kme, jms:jme ),      &
-            INTENT(INOUT) ::                          &
-                                              ww,     &
-                                              ww_1,   &
-                                              t,      &
-                                              t_ave,  &
-                                              uam,    &
-                                              vam,    &
-                                              wwam,   &
+  REAL, DIMENSION( ims:ime , kms:kme, jms:jme ),        &
+            INTENT(INOUT) ::                            &
+                                              ww,       &
+                                              ww_1,     &
+                                              t,        &
+                                              t_ave,    &
+                                              uam,      &
+                                              vam,      &
+                                              wwam,     &
+                                              t_tend_r, &
 					      t_tend_acst
                                               
   REAL, DIMENSION( ims:ime , jms:jme ),    INTENT(IN   ) :: muu,  &
@@ -1211,6 +1227,7 @@ SUBROUTINE advance_mu_t( ww, ww_1, u, u_1, v, v_1,            &
      DO k=1,k_end
      DO i=i_start, i_end
        t_ave(i,k,j) = t(i,k,j)
+       t_tend_r(i,k,j) = ft(i,k,j)
        t   (i,k,j) = t(i,k,j) + msfty(i,j)*dts*ft(i,k,j)
      END DO
      END DO

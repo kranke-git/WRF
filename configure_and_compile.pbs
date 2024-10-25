@@ -3,7 +3,7 @@
 #$ -m abe
 #$ -q *@@crippa
 #$ -N COMPILEW
-#$ -pe mpi-64 64
+#$ -pe mpi-48 48
 
 # IMPORTANT: DO NOT LOAD NETCDF LIBRARIES
 # USE PRIVATE ONES BY SETTING NETCDF ENV VARIABLE
@@ -26,7 +26,7 @@ export GEOTIFF='/afs/crc/group/EnvStat/build/lib'
 #./configure
 # echo 15 | ./configure #Intel (dmpar) - MPI
 # echo 14 | ./configure #Intel (smpar)   - openmp
-echo 32 | ./configure   #Intel (serial)
+echo 34 | ./configure   #gcc
 ./compile em_les
 #./compile em_real
 
