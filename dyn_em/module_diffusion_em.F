@@ -4876,6 +4876,25 @@ SUBROUTINE vertical_diffusion_s( tendency, config_flags, var, xkhv,       &
    ENDDO
    ENDDO
    ENDDO
+   WRITE(6,*) "xkxavg(5,1,5)=", xkxavg(5,1,5)
+   WRITE(6,*) "***CARE ABOUT THIS xkxavg(5,2,5)=", xkxavg(5,2,5)
+   WRITE(6,*) "xkxavg(5,3,5)=", xkxavg(5,3,5)
+   WRITE(6,*) "var(5,2,5)=",var(5,2,5)
+   WRITE(6,*) "var(5,1,5)=",var(5,1,5)
+   WRITE(6,*) "rdz(5,1,5)=",rdz(5,1,5)
+   WRITE(6,*) "***CARE ABOUT THIS rdz(5,2,5)=",rdz(5,2,5)
+   WRITE(6,*) "rdz(5,3,5)=",rdz(5,3,5)
+   WRITE(6,*) "fnp(2) is=",fnp(2)
+   WRITE(6,*) "fnp(3) is=",fnp(3)
+   WRITE(6,*) "fnm(3) is=",fnm(2)
+   WRITE(6,*) "fnm(3) is=",fnm(3)
+   WRITE(6,*) "xkhv(5,1,5) is=",xkhv(5,1,5)
+   WRITE(6,*) "xkhv(5,2,5) is=",xkhv(5,2,5)
+   WRITE(6,*) "xkhv(5,3,5) is=",xkhv(5,3,5)
+   WRITE(6,*) "rho(5,1,5) is=",rho(5,1,5)
+   WRITE(6,*) "rho(5,2,5) is=",rho(5,2,5)
+   WRITE(6,*) "rho(5,3,5) is=",rho(5,3,5)
+
 
    DO j = j_start, j_end
    DO i = i_start, i_end
@@ -4892,6 +4911,16 @@ SUBROUTINE vertical_diffusion_s( tendency, config_flags, var, xkhv,       &
    ENDDO
    ENDDO
    ENDDO
+
+   ! kranke-added prints to debug
+   WRITE(6,*) "INSIDE vertical_diffusion_s"
+   WRITE(6,*) "tendency(5,1,5)=", tendency(5,1,5)
+   WRITE(6,*) "tendency(5,2,5)=", tendency(5,2,5)
+   WRITE(6,*) "g=", g 
+   WRITE(6,*) "dnw(1)=", dnw(1)
+   WRITE(6,*) "H3(5,1,5)=", H3(5,1,5)
+   WRITE(6,*) "H3(5,2,5)=", H3(5,2,5)
+   WRITE(6,*) "H3(5,3,5)=", H3(5,3,5)
 
    IF (doing_tke) THEN
       DO j = j_start, j_end
